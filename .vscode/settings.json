@@ -1,0 +1,13 @@
+{
+	"editor.formatOnSave": true,
+	"go.addTags": {
+		"tags": "json",
+		"options": "",
+		"promptForTags": false,
+		"transform": "camelcase"
+	},
+	"go.testFlags": [
+		"-v",
+		"-count=1"
+	]
+}
