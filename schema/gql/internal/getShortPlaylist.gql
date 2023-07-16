@@ -1,0 +1,54 @@
+# vars
+# {
+#   "first": 3,
+#   "uniqueReleases": true,
+#   "ids": []
+# }
+
+query getShortPlaylist(
+  $ids: [ID!]!
+  $first: Int = 3
+  $uniqueReleases: Boolean = true
+) {
+  getPlaylists(ids: $ids) {
+    id
+    title
+    description
+    isPublic
+    collectionLastModified
+    updated
+    userId
+    image {
+      src
+      palette
+      palette_bottom: paletteBottom
+    }
+    tracks {
+      id
+    }
+    ftracks(first: $first, uniqueReleases: $uniqueReleases) {
+      id
+    }
+    duration
+    branded
+    coverV1 {
+      src
+    }
+    chart {
+      trackId
+      positionChange
+    }
+    buttons {
+      title
+      action {
+        ... on OpenUrlAction {
+          name
+          url
+          fallbackUrl
+          inWebkit
+          auth
+        }
+      }
+    }
+  }
+}

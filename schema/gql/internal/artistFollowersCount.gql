@@ -1,0 +1,14 @@
+# vars
+# {
+#   "ids": [
+#     ID_HERE
+#   ]
+# }
+
+query artistFollowersCount($ids: [ID!]!) {
+  getArtists(ids: $ids) {
+    collectionItemData {
+      likesCount
+    }
+  }
+}

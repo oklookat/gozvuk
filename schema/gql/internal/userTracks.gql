@@ -1,0 +1,19 @@
+# vars
+# {
+#   "orderDirection": "asc" | "desc",
+#   "orderBy": "alphabet" | "artist" | "dateAdded"
+# }
+
+query userTracks(
+  $orderBy: TrackOrderByType
+  $orderDirection: OrderDirectionType
+) {
+  collection {
+    tracks(orderBy: $orderBy, orderDirection: $orderDirection) {
+      id
+      collectionItemData {
+        lastModified
+      }
+    }
+  }
+}

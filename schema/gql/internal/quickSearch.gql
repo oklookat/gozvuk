@@ -1,0 +1,98 @@
+# vars
+# {
+#   "query": "track",
+#   "limit": 5,
+#   "searchSessionId": STRING LIKE "63cccccc-4b2b-889b-0ryw-12v183jbb5qm"
+# }
+
+query quickSearch($query: String, $limit: Int, $searchSessionId: String) {
+  quickSearch(query: $query, limit: $limit, searchSessionId: $searchSessionId) {
+    searchSessionId
+    content {
+      __typename
+      ... on Track {
+        id
+        availability
+        title
+        artistNames
+        release {
+          image {
+            src
+          }
+        }
+      }
+      ... on Artist {
+        id
+        title
+        image {
+          src
+        }
+        profile {
+          id
+        }
+      }
+      ... on Release {
+        id
+        availability
+        title
+        artistNames
+        date
+        image {
+          src
+        }
+      }
+      ... on Playlist {
+        id
+        isPublic
+        title
+        image {
+          src
+        }
+        description
+      }
+      ... on Episode {
+        id
+        title
+        availability
+        publicationDate
+        duration
+        podcast {
+          title
+        }
+        image {
+          src
+        }
+      }
+      ... on Podcast {
+        id
+        availability
+        title
+        image {
+          src
+        }
+      }
+      ... on Profile {
+        id
+        name
+        image {
+          src
+        }
+      }
+      ... on Book {
+        id
+        availability
+        title
+        authorNames
+      }
+      ... on Chapter {
+        id
+        availability
+        title
+        position
+        book {
+          title
+        }
+      }
+    }
+  }
+}

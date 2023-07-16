@@ -1,0 +1,30 @@
+# vars
+# {
+#   "cursor": "",
+#   "count": 10
+# }
+
+query userPaginatedPodcasts($cursor: String, $count: Int) {
+  paginatedCollection {
+    podcasts(pagination: { after: $cursor, first: $count }) {
+      items {
+        id
+        title
+        availability
+        image {
+          src
+          palette
+          paletteBottom
+        }
+        authors {
+          id
+          name
+        }
+      }
+      page {
+        endCursor
+        hasNextPage
+      }
+    }
+  }
+}

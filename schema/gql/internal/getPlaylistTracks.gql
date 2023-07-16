@@ -1,0 +1,59 @@
+# vars
+# {
+#   "limit": 50,
+#   "offset": 50,
+#   "withStream": false,
+#   "id": ID_HERE
+# }
+
+query getPlaylistTracks(
+  $id: ID!
+  $limit: Int = 5
+  $offset: Int = 0
+  $withStream: Boolean = false
+) {
+  playlistTracks(id: $id, limit: $limit, offset: $offset) {
+    artistTemplate
+    artistNames
+    artists {
+      id
+      title
+      image {
+        src
+        palette
+      }
+    }
+    hasFlac
+    zchan
+    lyrics
+    title
+    searchTitle
+    explicit
+    credits
+    availability
+    position
+    duration
+    id
+    condition
+    release {
+      id
+      genres {
+        name
+      }
+      title
+      image {
+        src
+        palette
+        palette_bottom: paletteBottom
+      }
+    }
+    searchTitle
+    title
+    stream @include(if: $withStream) {
+      expire
+      expireDelta
+      high
+      mid
+    }
+  }
+}

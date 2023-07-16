@@ -1,0 +1,29 @@
+# vars
+# {
+#   "ids": []
+# }
+
+query getEpisodes($ids: [ID!]!) {
+  getEpisodes(ids: $ids) {
+    id
+    title
+    description
+    publicationDate
+    duration
+    explicit
+    availability
+    image {
+      src
+      palette
+      palette_bottom: paletteBottom
+    }
+    podcast {
+      id
+      title
+      authors {
+        id
+        name
+      }
+    }
+  }
+}

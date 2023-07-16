@@ -1,0 +1,40 @@
+# vars
+# {
+#   "firstAuthorId": USER_ID_HERE?,
+#   "secondAuthorId": USER_ID_HERE?
+# }
+
+query synthesisPlaylistBuild($firstAuthorId: ID!, $secondAuthorId: ID!) {
+  synthesisPlaylistBuild(authorIds: [$firstAuthorId, $secondAuthorId]) {
+    id
+    tracks {
+      id
+      title
+      condition
+      availability
+      duration
+      zchan
+      artists {
+        id
+        title
+      }
+      release {
+        id
+        title
+        image {
+          src
+        }
+      }
+    }
+    authors {
+      id
+      name
+      image {
+        src
+      }
+      matches {
+        score
+      }
+    }
+  }
+}

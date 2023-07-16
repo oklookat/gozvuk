@@ -1,0 +1,10 @@
+# vars
+# {
+#   "id": ID_HERE
+# }
+
+mutation deletePlaylist($id: ID!) {
+  playlist {
+    delete(id: $id)
+  }
+}

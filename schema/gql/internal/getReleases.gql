@@ -1,0 +1,98 @@
+# vars
+# {
+#   "withTracks": false,
+#   "withArtists": true,
+#   "withLabel": false,
+#   "withRelated": false,
+#   "relatedLimit": 100,
+#   "ids": [
+#     NUMBER_ID_HERE,
+#   ]
+# }
+
+# Получить релизы (альбомы, EP, etc)
+query getReleases(
+  $ids: [ID!]!
+  $withTracks: Boolean = false
+  $withArtists: Boolean = false
+  $withLabel: Boolean = false
+  $withRelated: Boolean = false
+  $relatedLimit: Int = 100
+) {
+  getReleases(ids: $ids) {
+    id
+    title
+    searchTitle
+    type
+    date
+    genres {
+      id
+      name
+      shortName
+    }
+    image {
+      src
+      palette
+      paletteBottom
+    }
+    artists @include(if: $withArtists) {
+      id
+      title
+    }
+    tracks @include(if: $withTracks) {
+      id
+      title
+      searchTitle
+      duration
+      position
+      availability
+      artistTemplate
+      condition
+      explicit
+      lyrics
+      hasFlac
+      zchan
+      artists {
+        id
+        title
+      }
+    }
+    label @include(if: $withLabel) {
+      id
+      title
+      searchTitle
+      description
+      image {
+        src
+        palette
+        paletteBottom
+      }
+      hasImage
+    }
+    related(limit: $relatedLimit) @include(if: $withRelated) {
+      id
+      title
+      searchTitle
+      type
+      date
+      genres {
+        id
+        name
+        shortName
+      }
+      image {
+        src
+        palette
+        paletteBottom
+      }
+      artists {
+        id
+        title
+      }
+      availability
+      artistTemplate
+    }
+    availability
+    artistTemplate
+  }
+}

@@ -1,6 +1,7 @@
 {
 	"recommendations": [
 		"golang.go",
-		"EditorConfig.EditorConfig"
+		"EditorConfig.EditorConfig",
+		"GraphQL.vscode-graphql-syntax"
 	]
 }

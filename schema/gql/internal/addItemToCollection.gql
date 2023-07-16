@@ -1,0 +1,11 @@
+# vars
+# {
+#   "id": ID_HERE,
+#   "type": artist | release | track | podcast | episode
+# }
+
+mutation addItemToCollection($id: ID, $type: CollectionItemType) {
+  collection {
+    addItem(id: $id, type: $type)
+  }
+}

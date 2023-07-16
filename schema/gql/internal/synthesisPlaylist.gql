@@ -1,0 +1,40 @@
+# vars
+# {
+#   "ids": []
+# }
+
+query synthesisPlaylist($ids: [ID!]!) {
+  synthesisPlaylist(ids: $ids) {
+    id
+    tracks {
+      id
+      title
+      condition
+      artistTemplate
+      availability
+      duration
+      zchan
+      artists {
+        id
+        title
+      }
+      release {
+        id
+        title
+        image {
+          src
+        }
+      }
+    }
+    authors {
+      id
+      name
+      image {
+        src
+      }
+      matches {
+        score
+      }
+    }
+  }
+}
