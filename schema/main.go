@@ -39,15 +39,16 @@ type Image struct {
 	// Высота.
 	H *int `json:"h"`
 	// Пример: #ffffff,#fcfcfb,#282422
-	Palette string `json:"palette"`
+	Palette *string `json:"palette"`
 	// Пример: #ffffff,#2b2726,#887f70
-	PaletteBottom string `json:"palette_bottom"`
+	PaletteBottom *string `json:"palette_bottom"`
 	// Пример: https://cdn51.zvuk.com/pic?type=release&id=3322849&ext=jpg&size={size}
 	Src string `json:"src"`
 	// Ширина.
 	W *int `json:"w"`
 }
 
+// Получить ссылку на изображение.
 func (i Image) URL(width, height int) *url.URL {
 	parsed, _ := url.Parse(i.Src)
 	if parsed == nil {
@@ -78,16 +79,24 @@ type (
 		Data T `json:"data"`
 	}
 
-	Release struct {
-		ID             string  `json:"id"`
-		Title          string  `json:"title"`
-		SearchTitle    *string `json:"searchTitle"`
-		Type           *string `json:"type"`
-		Date           *Time   `json:"date"`
-		Image          *Image  `json:"image"`
-		Availability   *int    `json:"availability"`
-		ArtistTemplate *string `json:"artistTemplate"`
-		Artists        []ShortArtist
+	Background struct {
+		Type     any    `json:"type"`
+		Image    *Image `json:"image"`
+		Color    any    `json:"color"`
+		Gradient any    `json:"gradient"`
+	}
+
+	Animation struct {
+		ArtistID   ID          `json:"artistId"`
+		Effect     any         `json:"effect"`
+		Image      *Image      `json:"image"`
+		Background *Background `json:"background"`
+	}
+
+	// Какая-то сущность,
+	// т.е минимальный набор информации о (ком/чём)-то.
+	Entity struct {
+		ID ID `json:"id"`
 	}
 )
 
@@ -122,3 +131,37 @@ func (t *Time) UnmarshalJSON(data []byte) error {
 
 	return err
 }
+
+type CollectionItemType string
+
+const (
+	// Артист.
+	CollectionItemTypeArtist CollectionItemType = "artist"
+
+	// Альбом, EP, etc.
+	CollectionItemTypeRelease CollectionItemType = "release"
+
+	// Трек.
+	CollectionItemTypeTrack CollectionItemType = "track"
+
+	// Подкаст.
+	CollectionItemTypePodcast CollectionItemType = "podcast"
+
+	// Эпизод подкаста.
+	CollectionItemTypeEpisode CollectionItemType = "episode"
+)
+
+// Тип сущности.
+type Typename string
+
+const (
+	TypenameArtist   Typename = "Artist"
+	TypenameTrack    Typename = "Track"
+	TypenameRelease  Typename = "Release"
+	TypenamePlaylist Typename = "Playlist"
+	TypenameEpisode  Typename = "Episode"
+	TypenamePodcast  Typename = "Podcast"
+	TypenameProfile  Typename = "Profile"
+	TypenameBook     Typename = "Book"
+	TypenameChapter  Typename = "Chapter"
+)

@@ -14,24 +14,14 @@ const (
 // Получить Client для запросов к API.
 //
 // accessToken можно получить тут: https://zvuk.com/api/tiny/profile
-func New(accessToken string) (*Client, error) {
+func New(accessToken string) *Client {
 	httpCl := vantuz.C().SetGlobalHeader("X-Auth-Token", accessToken)
 	cl := &Client{
 		accessToken: accessToken,
 		Http:        httpCl,
 	}
 	cl.SetUserAgent("gozvuk")
-
-	// Ping.
-	profile, err := cl.Profile()
-	if err != nil {
-		return nil, err
-	}
-	if profile.Result.IsAnonymous != nil && *profile.Result.IsAnonymous {
-		return nil, schema.ErrNotAuthorized
-	}
-
-	return cl, err
+	return cl
 }
 
 // Клиент для запросов к API.
@@ -50,7 +40,8 @@ func (c *Client) SetUserAgent(val string) {
 	c.Http.SetUserAgent(val)
 }
 
-func (c *Client) Profile() (*schema.Profile, error) {
+// Получить текущий аккаунт.
+func (c Client) Profile() (*schema.Profile, error) {
 	var respErr schema.Error
 	var result schema.Profile
 	_, err := c.Http.R().SetError(&respErr).SetResult(&result).Get(context.Background(), genApiPathTiny("profile"))
@@ -61,4 +52,16 @@ func (c *Client) Profile() (*schema.Profile, error) {
 		return &result, nil
 	}
 	return &result, respErr
+}
+
+// Валидный токен / пользователь авторизован?
+func (c Client) IsAuthorized() (bool, error) {
+	profile, err := c.Profile()
+	if err != nil {
+		return false, err
+	}
+	if profile.Result.IsAnonymous != nil && *profile.Result.IsAnonymous {
+		return false, nil
+	}
+	return true, nil
 }

@@ -5,18 +5,11 @@ import (
 	"testing"
 )
 
-var _artistIds = [4]string{
-	"292150",
-	"681777",
-	"1221500",
-	"76007136",
-}
-
 func TestGetArtists(t *testing.T) {
+	ctx := context.Background()
 	cl := getClient(t)
 
-	ctx := context.Background()
-	resp, err := cl.GetArtists(ctx, _artistIds[:1], true, true, true, true, 0, 2, 0, 2, 2)
+	resp, err := cl.GetArtists(ctx, _artistIds[:], true, true, true, true, 0, 10, 0, 10, 10)
 	if err != nil {
 		t.Fatal(err)
 	}

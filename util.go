@@ -1,6 +1,7 @@
 package gozvuk
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
@@ -35,15 +36,12 @@ func wrapError(err error) error {
 
 var (
 	// Странная ошибка.
-	ErrNilResponse = errors.New(errPrefix + "nil http or schema response (???)")
-
-	// Ответ с ошибкой, но поля Error в ответе нет.
-	ErrNilResponseError = errors.New(errPrefix + "nil Response.Error (API changed?)")
+	ErrUnknown = errors.New(errPrefix + "unknown")
 )
 
 func checkResponse[T any](resp *vantuz.Response, data *schema.Response[T]) error {
 	if resp == nil || data == nil {
-		return ErrNilResponse
+		return ErrUnknown
 	}
 	if data.Error != nil {
 		return fmt.Errorf(errPrefix+"%s", *data.Error)
@@ -63,5 +61,14 @@ func checkResponse[T any](resp *vantuz.Response, data *schema.Response[T]) error
 	if resp.IsSuccess() {
 		return nil
 	}
-	return ErrNilResponseError
+	return ErrUnknown
+}
+
+func sendRequestWithBody[T any](ctx context.Context, cl Client, body string) (*schema.Response[T], error) {
+	result := &schema.Response[T]{}
+	resp, err := cl.Http.R().SetJsonString(body).SetError(result).SetResult(result).Post(ctx, genApiPath())
+	if err != nil {
+		return result, err
+	}
+	return result, checkResponse(resp, result)
 }
