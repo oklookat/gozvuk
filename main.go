@@ -13,7 +13,8 @@ const (
 
 // Получить Client для запросов к API.
 //
-// accessToken можно получить тут: https://zvuk.com/api/tiny/profile
+// accessToken можно получить тут:
+// https://zvuk.com/api/tiny/profile
 func New(accessToken string) *Client {
 	httpCl := vantuz.C().SetGlobalHeader("X-Auth-Token", accessToken)
 	cl := &Client{

@@ -2,11 +2,15 @@
 
 Неофициальный клиент для API [zvuk.com](https://zvuk.com).
 
+На данный момент в разработке.
+Нужно реализовать методы, а после сделать нормальные поля ответа,
+отредактировав graphql запросы.
+
 # Реализовано
 
 - [x] addItemToCollection
 
-- [ ] artistFollowersCount
+- [x] artistFollowersCount
 
 - [x] createPlaylist
 
@@ -56,12 +60,14 @@
 
 - [x] setPlaylistToPublic
 
-- [ ] synthesisPlaylist
+- [x] synthesisPlaylist
 
-- [ ] userCollection
+- [x] synthesisPlaylistBuild
+
+- [x] userCollection
 
 - [ ] userPaginatedPodcasts
 
-- [ ] userPlaylists
+- [x] userPlaylists
 
 - [ ] userTracks

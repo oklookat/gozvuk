@@ -5,6 +5,8 @@ import _ "embed"
 var (
 	//go:embed gql/getArtists.gql
 	_getArtists string
+	//go:embed gql/artistFollowersCount.gql
+	_artistFollowersCount string
 )
 
 func GetArtists(ids []ID,
@@ -22,6 +24,20 @@ func GetArtists(ids []ID,
 		"releatedArtistsLimit": relatedArtistsLimit,
 		"ids":                  ids,
 	})
+}
+
+func ArtistFollowersCount(ids []ID) (string, error) {
+	return getGraphqlBody(_artistFollowersCount, "artistFollowersCount", map[string]any{
+		"ids": ids,
+	})
+}
+
+type ArtistFollowersCountResponse struct {
+	GetArtists []struct {
+		CollectionItemData struct {
+			LikesCount int `json:"likesCount"`
+		} `json:"collectionItemData"`
+	} `json:"getArtists"`
 }
 
 type (

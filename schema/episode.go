@@ -17,9 +17,4 @@ type (
 		Authors []Author `json:"authors"`
 		Image   Image    `json:"image"`
 	}
-
-	Author struct {
-		ID   ID     `json:"id"`
-		Name string `json:"name"`
-	}
 )

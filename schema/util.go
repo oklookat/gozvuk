@@ -2,6 +2,7 @@ package schema
 
 import "encoding/json"
 
+// Generate GraphQL JSON body.
 func getGraphqlBody(query, operationName string, variables map[string]any) (string, error) {
 	varsJson, err := json.Marshal(variables)
 	if err != nil {
