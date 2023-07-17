@@ -37,9 +37,14 @@ func TestPlaylistCRUD(t *testing.T) {
 	ctx := context.Background()
 	cl := getClient(t)
 
+	var (
+		name     = "testing"
+		isPublic bool
+	)
+
 	resp, err := cl.CreatePlaylist(ctx, []schema.PlaylistItem{
 		schema.NewPlaylistItem(schema.PlaylistItemTypeTrack, _trackIds[0]),
-	}, "testing")
+	}, name)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -47,10 +52,42 @@ func TestPlaylistCRUD(t *testing.T) {
 	if len(id) == 0 {
 		t.Fatal("empty Playlist.Create ID")
 	}
-	testRenamePlaylist(ctx, cl, t, id, "testingNew")
-	testSetPlaylistToPublic(ctx, cl, t, id, false)
-	testSetPlaylistToPublic(ctx, cl, t, id, true)
+	name = "testingNew"
+	testRenamePlaylist(ctx, cl, t, id, name)
+	testSetPlaylistToPublic(ctx, cl, t, id, isPublic)
+	isPublic = true
+	testSetPlaylistToPublic(ctx, cl, t, id, isPublic)
+
+	var items []schema.PlaylistItem
+	for i, trackID := range _trackIds[:] {
+		if i > 4 {
+			break
+		}
+		items = append(items, schema.PlaylistItem{
+			Type:   schema.PlaylistItemTypeTrack,
+			ItemID: trackID,
+		})
+	}
+	testAddTracksToPlaylist(ctx, cl, t, id, items)
+	testRemoveTracksFromPlaylist(ctx, cl, t, id, items[:3], isPublic, name)
 	testDeletePlaylist(ctx, cl, t, id)
+}
+
+func testAddTracksToPlaylist(ctx context.Context,
+	cl *Client, t *testing.T, id schema.ID, items []schema.PlaylistItem) {
+	_, err := cl.AddTracksToPlaylist(ctx, id, items)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func testRemoveTracksFromPlaylist(ctx context.Context,
+	cl *Client, t *testing.T,
+	id schema.ID, items []schema.PlaylistItem, isPublic bool, name string) {
+	_, err := cl.UpdataPlaylist(ctx, id, items, isPublic, name)
+	if err != nil {
+		t.Fatal(err)
+	}
 }
 
 func testDeletePlaylist(ctx context.Context,

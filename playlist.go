@@ -52,6 +52,28 @@ func (c Client) RenamePlaylist(ctx context.Context, id schema.ID, newName string
 	return sendRequestWithBody[any](ctx, c, body)
 }
 
+// Добавить треки в плейлист.
+func (c Client) AddTracksToPlaylist(ctx context.Context, id schema.ID, items []schema.PlaylistItem) (*schema.Response[any], error) {
+	body, err := schema.AddTracksToPlaylist(id, items)
+	if err != nil {
+		return nil, err
+	}
+	return sendRequestWithBody[any](ctx, c, body)
+}
+
+// Обновить плейлист. Например обновить треки.
+//
+// Внимание: плейлист обновится целиком. То есть если нужно
+// удалить трек(и), то в items должны быть все треки из плейлиста,
+// кроме тех которые нужно удалить.
+func (c Client) UpdataPlaylist(ctx context.Context, id schema.ID, items []schema.PlaylistItem, isPublic bool, name string) (*schema.Response[any], error) {
+	body, err := schema.UpdataPlaylist(id, items, isPublic, name)
+	if err != nil {
+		return nil, err
+	}
+	return sendRequestWithBody[any](ctx, c, body)
+}
+
 // Изменить видимость плейлиста.
 func (c Client) SetPlaylistToPublic(ctx context.Context, id schema.ID, isPublic bool) (*schema.Response[any], error) {
 	body, err := schema.SetPlaylistToPublic(id, isPublic)

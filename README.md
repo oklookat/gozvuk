@@ -28,6 +28,10 @@
 
 - [x] userPlaylists
 
+- [x] addTracksToPlaylist
+
+- [x] updataPlaylist
+
 - [x] userTracks
 
 - [x] getAllHiddenCollection

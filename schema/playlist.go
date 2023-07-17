@@ -23,6 +23,10 @@ var (
 	_synthesisPlaylistBuild string
 	//go:embed gql/synthesisPlaylist.gql
 	_synthesisPlaylist string
+	//go:embed gql/addTracksToPlaylist.gql
+	_addTracksToPlaylist string
+	//go:embed gql/updataPlaylist.gql
+	_updataPlaylist string
 )
 
 func GetPlaylists(ids []ID) (string, error) {
@@ -108,6 +112,22 @@ func SetPlaylistToPublic(id ID, isPublic bool) (string, error) {
 	return getGraphqlBody(_setPlaylistToPublic, "setPlaylistToPublic", map[string]any{
 		"id":       id,
 		"isPublic": isPublic,
+	})
+}
+
+func AddTracksToPlaylist(id ID, items []PlaylistItem) (string, error) {
+	return getGraphqlBody(_addTracksToPlaylist, "addTracksToPlaylist", map[string]any{
+		"id":    id,
+		"items": items,
+	})
+}
+
+func UpdataPlaylist(id ID, items []PlaylistItem, isPublic bool, name string) (string, error) {
+	return getGraphqlBody(_updataPlaylist, "updataPlaylist", map[string]any{
+		"id":       id,
+		"items":    items,
+		"isPublic": isPublic,
+		"name":     name,
 	})
 }
 
