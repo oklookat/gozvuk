@@ -2,7 +2,6 @@ package schema
 
 import (
 	_ "embed"
-	"time"
 )
 
 var (
@@ -18,6 +17,12 @@ var (
 	_renamePlaylist string
 	//go:embed gql/setPlaylistToPublic.gql
 	_setPlaylistToPublic string
+	//go:embed gql/getShortPlaylist.gql
+	_getShortPlaylist string
+	//go:embed gql/synthesisPlaylistBuild.gql
+	_synthesisPlaylistBuild string
+	//go:embed gql/synthesisPlaylist.gql
+	_synthesisPlaylist string
 )
 
 func GetPlaylists(ids []ID, shortTrackList, uniqueReleases bool,
@@ -104,29 +109,88 @@ type SetPlaylistToPublicResponse struct {
 	} `json:"playlist"`
 }
 
+func GetShortPlaylist(ids []ID, first int, uniqueReleases bool) (string, error) {
+	return getGraphqlBody(_getShortPlaylist, "getShortPlaylist", map[string]any{
+		"first":          first,
+		"uniqueReleases": uniqueReleases,
+		"ids":            ids,
+	})
+}
+
+type GetShortPlaylistResponse struct {
+	GetPlaylists []Playlist `json:"getPlaylists"`
+}
+
+func SynthesisPlaylistBuild(firstAuthor, secondAuthor ID) (string, error) {
+	return getGraphqlBody(_synthesisPlaylistBuild, "synthesisPlaylistBuild", map[string]any{
+		"firstAuthorId":  firstAuthor,
+		"secondAuthorId": secondAuthor,
+	})
+}
+
+type SynthesisPlaylistBuildResponse struct {
+	SynthesisPlaylistBuild SynthesisPlaylist `json:"synthesisPlaylistBuild"`
+}
+
+func SynthesisPlaylistQ(ids []ID) (string, error) {
+	return getGraphqlBody(_synthesisPlaylist, "synthesisPlaylist", map[string]any{
+		"ids": ids,
+	})
+}
+
+type SynthesisPlaylistResponse struct {
+	SynthesisPlaylist []SynthesisPlaylist `json:"synthesisPlaylist"`
+}
+
 type (
 	// Плейлист.
 	Playlist struct {
-		ID          ID         `json:"id"`
-		Title       string     `json:"title"`
-		SearchTitle *string    `json:"search_title"`
-		Updated     *time.Time `json:"updated"`
-		Description *string    `json:"description"`
-		Image       *Image     `json:"image"`
-		Tracks      []Track    `json:"tracks"`
-		Ftracks     []any      `json:"ftracks"`
-		Buttons     []any      `json:"buttons"`
-		Branded     *bool      `json:"branded"`
-		Cover       any        `json:"cover"`
+		ID ID `json:"id"`
 
-		// Я не знаю в чем разница между IsPublic и Is_Public.
+		// Название.
+		Title string `json:"title"`
+
+		// Описание.
+		Description *string `json:"description"`
+
+		// Я не знаю в чем разница между IsPublic и Is_Public. Легаси?
 		Is_Public *bool `json:"is_public"`
-		IsPublic  *bool `json:"isPublic"`
 
-		Duration  *int    `json:"duration"`
-		IsDeleted *bool   `json:"isDeleted"`
-		UserID    *string `json:"userId"`
-		Shared    *bool   `json:"shared"`
+		// Плейлист публичный?
+		IsPublic *bool `json:"isPublic"`
+
+		CollectionLastModified *Time `json:"collectionLastModified"`
+		Updated                *Time `json:"updated"`
+
+		// ID автора.
+		UserID *string `json:"userId"`
+
+		Image *Image `json:"image"`
+
+		// Треки.
+		Tracks []Track `json:"tracks"`
+
+		// ???.
+		Ftracks []Track `json:"ftracks"`
+
+		// В секундах.
+		Duration *int `json:"duration"`
+
+		Branded *bool `json:"branded"`
+
+		Cover   any    `json:"cover"`
+		CoverV1 *Image `json:"coverV1"`
+
+		SearchTitle *string `json:"searchTitle"`
+		Buttons     []any   `json:"buttons"`
+		IsDeleted   *bool   `json:"isDeleted"`
+		Shared      *bool   `json:"shared"`
+	}
+
+	SynthesisPlaylist struct {
+		ID      ID       `json:"id"`
+		Tracks  []Track  `json:"tracks"`
+		Authors []Author `json:"authors"`
 	}
 )
 
@@ -137,13 +201,19 @@ func NewPlaylistItem(itype PlaylistItemType, item ID) PlaylistItem {
 	}
 }
 
+// Тип сущности в плейлисте.
 type PlaylistItemType string
 
+// Сущность в плейлисте.
 type PlaylistItem struct {
-	Type   PlaylistItemType `json:"type"`
-	ItemID ID               `json:"item_id"`
+	// Тип сущности.
+	Type PlaylistItemType `json:"type"`
+
+	// ID сущности.
+	ItemID ID `json:"item_id"`
 }
 
 const (
+	// Трек.
 	PlaylistItemTypeTrack PlaylistItemType = "track"
 )

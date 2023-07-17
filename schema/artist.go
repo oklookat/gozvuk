@@ -46,21 +46,25 @@ type (
 	}
 
 	Artist struct {
-		Entity
+		ID ID `json:"id"`
+
 		Title *string `json:"title"`
 
 		SearchTitle *string  `json:"searchTitle"`
 		Description *string  `json:"description"`
 		HasPage     *bool    `json:"hasPage"`
 		Profile     *Profile `json:"profile"`
+
 		// Фото артиста.
 		Image *Image `json:"image"`
+
 		// Дополнительное фото артиста.
-		SecondImage            *Image     `json:"secondImage"`
+		SecondImage *Image `json:"secondImage"`
+
 		Animation              *Animation `json:"animation"`
-		CollectionLastModified any        `json:"collectionLastModified"`
+		CollectionLastModified *Time      `json:"collectionLastModified"`
 		Releases               []Release  `json:"releases"`
 		PopularTracks          []Track    `json:"popularTracks"`
-		RelatedArtists         []Entity   `json:"relatedArtists"`
+		RelatedArtists         []Artist   `json:"relatedArtists"`
 	}
 )

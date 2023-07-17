@@ -97,26 +97,37 @@ type (
 	}
 
 	Background struct {
-		Type     any    `json:"type"`
-		Image    *Image `json:"image"`
+		Type BackgroundType `json:"type"`
+		// Например ссылка на изображение.
+		Image    string `json:"image"`
 		Color    any    `json:"color"`
 		Gradient any    `json:"gradient"`
 	}
 
 	Animation struct {
-		ArtistID   ID          `json:"artistId"`
-		Effect     any         `json:"effect"`
-		Image      *Image      `json:"image"`
-		Background *Background `json:"background"`
+		ArtistID ID              `json:"artistId"`
+		Effect   AnimationEffect `json:"effect"`
+		// Например ссылка на изображение.
+		Image      string     `json:"image"`
+		Background Background `json:"background"`
 	}
 
-	// Какая-то сущность,
-	// т.е минимальный набор информации о (ком/чём)-то.
-	Entity struct {
+	// Лейбл / мейджор.
+	Label struct {
+		// ID лейбла.
 		ID ID `json:"id"`
+
+		// Название лейбла.
+		Title string `json:"title"`
+
+		SearchTitle *string `json:"searchTitle"`
+		Description *string `json:"description"`
+		Image       *Image  `json:"image"`
+		HasImage    *bool   `json:"hasImage"`
 	}
 )
 
+// Дата, время.
 type Time struct {
 	time.Time
 }
@@ -149,25 +160,6 @@ func (t *Time) UnmarshalJSON(data []byte) error {
 	return err
 }
 
-type CollectionItemType string
-
-const (
-	// Артист.
-	CollectionItemTypeArtist CollectionItemType = "artist"
-
-	// Альбом, EP, etc.
-	CollectionItemTypeRelease CollectionItemType = "release"
-
-	// Трек.
-	CollectionItemTypeTrack CollectionItemType = "track"
-
-	// Подкаст.
-	CollectionItemTypePodcast CollectionItemType = "podcast"
-
-	// Эпизод подкаста.
-	CollectionItemTypeEpisode CollectionItemType = "episode"
-)
-
 // Тип сущности.
 type Typename string
 
@@ -181,4 +173,45 @@ const (
 	TypenameProfile  Typename = "Profile"
 	TypenameBook     Typename = "Book"
 	TypenameChapter  Typename = "Chapter"
+)
+
+// Сортировка по дате.
+type OrderDirection string
+
+const (
+	// По возрастанию (от меньшего к большему).
+	OrderDirectionAsc OrderDirection = "asc"
+
+	// По убыванию (от большего к меньшему).
+	OrderDirectionDesc OrderDirection = "desc"
+)
+
+// Сортировка по полю.
+type OrderBy string
+
+const (
+	// По алфавиту. Например по названию трека.
+	OrderByAlphabet OrderBy = "alphabet"
+
+	// По имени артиста.
+	OrderByArtist OrderBy = "artist"
+
+	// По дате добавления.
+	OrderByDateAdded OrderBy = "dateAdded"
+)
+
+// Тип фона.
+type BackgroundType string
+
+const (
+	// Картинка.
+	BackgroundTypeImage BackgroundType = "image"
+)
+
+// Эффект анимации.
+type AnimationEffect string
+
+const (
+	// Вправо.
+	AnimationEffectToRight AnimationEffect = "toRight"
 )

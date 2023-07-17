@@ -82,7 +82,7 @@ type (
 		Releases  *SearchResult[Release]       `json:"releases"`
 		Playlists *SearchResult[Playlist]      `json:"playlists"`
 		Profiles  *SearchResult[PublicProfile] `json:"profiles"`
-		Books     *SearchResult[Entity]        `json:"books"`
+		Books     *SearchResult[Book]          `json:"books"`
 		Episodes  *SearchResult[Episode]       `json:"episodes"`
 		Podcasts  *SearchResult[Podcast]       `json:"podcasts"`
 

@@ -1,0 +1,11 @@
+# vars
+# {
+#   "id": ID_HERE,
+#   "type": "track"
+# }
+
+mutation addItemToHidden($id: ID!, $type: CollectionItemType!) {
+  hidden_collection {
+    addItem(id: $id, type: $type)
+  }
+}

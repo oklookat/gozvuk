@@ -10,35 +10,39 @@
 
 - [x] addItemToCollection
 
+- [x] addItemToHidden
+
 - [x] artistFollowersCount
 
 - [x] createPlaylist
 
 - [x] deletePlaylist
 
-- [ ] episodes
+- [x] episodes
 
-- [ ] followingCount
+- [x] followingCount
 
-- [ ] getAllHiddenCollection
+- [x] getAllHiddenCollection
 
 - [x] getArtists
 
-- [ ] getEpisodes
+- [x] getEpisodes
 
-- [ ] getHiddenTracks
+- [x] getFullTrack
+
+- [x] getHiddenTracks
 
 - [x] getPlaylists
 
 - [x] getPlaylistTracks
 
-- [ ] getPodcasts
+- [x] getPodcasts
 
-- [ ] getReleases
+- [x] getReleases
 
-- [ ] getShortPlaylist
+- [x] getShortPlaylist
 
-- [ ] getTracks
+- [x] getTracks
 
 - [ ] listenedEpisodes
 
@@ -46,13 +50,13 @@
 
 - [ ] notificationsHasUnread
 
-- [ ] profileFollowersCount
+- [x] profileFollowersCount
 
 - [x] quickSearch
 
 - [x] removeItemFromCollection
 
-- [ ] removeItemFromHidden
+- [x] removeItemFromHidden
 
 - [x] renamePlaylist
 
@@ -66,8 +70,8 @@
 
 - [x] userCollection
 
-- [ ] userPaginatedPodcasts
+- [x] userPaginatedPodcasts
 
 - [x] userPlaylists
 
-- [ ] userTracks
+- [x] userTracks
