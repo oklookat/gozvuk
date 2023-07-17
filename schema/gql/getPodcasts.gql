@@ -1,47 +1,25 @@
-# vars
-# {
-#   "withEpisodes": true,
-#   "ids": [
-#     ID_HERE
-#   ]
-# }
-
-query getPodcasts($ids: [ID!]!, $withEpisodes: Boolean = false) {
+query getPodcasts($ids: [ID!]!) {
   getPodcasts(ids: $ids) {
     id
     title
-    description
-    updatedDate
     explicit
-    availability
-    type
     image {
       src
-      palette
-      paletteBottom
     }
     authors {
       id
       name
     }
-    episodes @include(if: $withEpisodes) {
+    collectionItemData {
+      itemStatus
+      lastModified
+    }
+    description
+    updatedDate
+    availability
+    type
+    episodes {
       id
-      title
-      description
-      image {
-        src
-        palette
-        paletteBottom
-      }
-      explicit
-      availability
-      publicationDate
-      duration
-      season {
-        id
-        name
-        seasonNumber
-      }
     }
   }
 }

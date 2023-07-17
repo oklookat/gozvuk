@@ -1,9 +1,3 @@
-# vars
-# {
-#   "id": ID_HERE,
-#   "type": track | release | artist | podcast | episode
-# }
-
 mutation removeItemFromCollection($id: ID, $type: CollectionItemType) {
   collection {
     removeItem(id: $id, type: $type)

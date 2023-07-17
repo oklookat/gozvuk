@@ -17,18 +17,3 @@ func TestGetArtists(t *testing.T) {
 		t.Fatal("empty getArtists")
 	}
 }
-
-func TestArtistFollowersCount(t *testing.T) {
-	ctx := context.Background()
-	cl := getClient(t)
-
-	resp, err := cl.ArtistFollowersCount(ctx, _artistIds[:3])
-	if err != nil {
-		t.Fatal(err)
-	}
-	if len(resp.Data.GetArtists) == 0 {
-		if err != nil {
-			t.Fatal("0 len GetArtists")
-		}
-	}
-}

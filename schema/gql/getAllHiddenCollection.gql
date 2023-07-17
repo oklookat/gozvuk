@@ -1,6 +1,3 @@
-# vars
-# {}
-
 query getAllHiddenCollection {
   hidden_collection {
     tracks {

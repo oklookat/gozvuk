@@ -22,6 +22,7 @@ query getArtists(
     collectionItemData {
       itemStatus
       lastModified
+      likesCount
     }
     searchTitle
     description @include(if: $withDescription)

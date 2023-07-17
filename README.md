@@ -2,9 +2,7 @@
 
 Неофициальный клиент для API [zvuk.com](https://zvuk.com).
 
-На данный момент в разработке. Редактирую запросы и ответы.
-
-# Реализовано (refactored)
+# Реализовано
 
 - [x] search
 
@@ -24,54 +22,48 @@
 
 - [x] getShortPlaylist
 
-- [ ] getEpisodes
+- [x] renamePlaylist
 
-- [ ] userPlaylists
+- [x] setPlaylistToPublic
 
-- [ ] userTracks
+- [x] userPlaylists
 
-- [ ] getAllHiddenCollection
+- [x] userTracks
 
-- [ ] getHiddenTracks
+- [x] getAllHiddenCollection
 
-- [ ] getPodcasts
+- [x] getHiddenTracks
 
-# Реализовано, но возможно нужен рефакторинг
+- [x] userCollection
+
+- [x] userPaginatedPodcasts
+
+- [x] synthesisPlaylist
+
+- [x] synthesisPlaylistBuild
+
+- [x] getEpisodes
+
+- [x] getPodcasts
 
 - [x] addItemToCollection
 
 - [x] addItemToHidden
 
-- [x] artistFollowersCount
+- [x] removeItemFromCollection
+
+- [x] removeItemFromHidden
 
 - [x] createPlaylist
 
 - [x] deletePlaylist
 
-- [x] episodes
-
 - [x] followingCount
+
+- [x] profileFollowersCount
 
 - [ ] listenedEpisodes
 
 - [ ] listeningHistory
 
 - [ ] notificationsHasUnread
-
-- [x] profileFollowersCount
-
-- [x] removeItemFromCollection
-
-- [x] removeItemFromHidden
-
-- [x] renamePlaylist
-
-- [x] setPlaylistToPublic
-
-- [x] synthesisPlaylist
-
-- [x] synthesisPlaylistBuild
-
-- [x] userCollection
-
-- [x] userPaginatedPodcasts

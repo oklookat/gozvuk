@@ -1,12 +1,9 @@
-# vars
-# {}
-
 query userPlaylists {
   collection {
     playlists {
       id
-      user_id: userId
-      last_modified: collectionLastModified
+      userId
+      collectionLastModified
     }
   }
 }

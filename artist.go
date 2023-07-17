@@ -19,12 +19,3 @@ func (c Client) GetArtists(ctx context.Context, ids []schema.ID,
 	}
 	return sendRequestWithBody[schema.GetArtistsResponse](ctx, c, body)
 }
-
-// Получить кол-во подписчиков на профиль артиста.
-func (c Client) ArtistFollowersCount(ctx context.Context, ids []schema.ID) (*schema.Response[schema.ArtistFollowersCountResponse], error) {
-	body, err := schema.ArtistFollowersCount(ids)
-	if err != nil {
-		return nil, err
-	}
-	return sendRequestWithBody[schema.ArtistFollowersCountResponse](ctx, c, body)
-}

@@ -1,25 +1,26 @@
-# vars
-# {
-#   "ids": []
-# }
-
 query getEpisodes($ids: [ID!]!) {
   getEpisodes(ids: $ids) {
     id
     title
-    description
-    publicationDate
-    duration
     explicit
-    availability
+    duration
+    publicationDate
     image {
       src
-      palette
-      palette_bottom: paletteBottom
     }
+    collectionItemData {
+      itemStatus
+      lastModified
+    }
+    description
+    availability
     podcast {
       id
       title
+      explicit
+      image {
+        src
+      }
       authors {
         id
         name

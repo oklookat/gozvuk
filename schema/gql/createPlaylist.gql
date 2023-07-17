@@ -1,14 +1,3 @@
-# vars
-# {
-#   "name": STRING_NAME_HERE,
-#   "items": [
-#     {
-#       "type": "track",
-#       "item_id": ID_HERE
-#     }
-#   ]
-# }
-
 mutation createPlayList($items: [PlaylistItem!]!, $name: String!) {
   playlist {
     create(items: $items, name: $name)

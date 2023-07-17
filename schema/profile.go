@@ -3,50 +3,9 @@ package schema
 import _ "embed"
 
 var (
-	//go:embed gql/userCollection.gql
-	_userCollection string
-	//go:embed gql/userPlaylists.gql
-	_userPlaylists string
-	//go:embed gql/userTracks.gql
-	_userTracks string
 	//go:embed gql/followingCount.gql
 	_followingCount string
-	//go:embed gql/profileFollowersCount.gql
-	_profileFollowersCount string
-	//go:embed gql/userPaginatedPodcasts.gql
-	_userPaginatedPodcasts string
 )
-
-func UserColelctionQ() (string, error) {
-	return getGraphqlBody(_userCollection, "userCollection", nil)
-}
-
-type UserCollectionResponse struct {
-	Collection Collection `json:"collection"`
-}
-
-func UserPlaylists() (string, error) {
-	return getGraphqlBody(_userPlaylists, "userPlaylists", nil)
-}
-
-type UserPlaylistsResponse struct {
-	Collection struct {
-		Playlists []UserCollectionPlaylist `json:"playlists"`
-	} `json:"collection"`
-}
-
-func UserTracks(direction OrderDirection, by OrderBy) (string, error) {
-	return getGraphqlBody(_userTracks, "userTracks", map[string]any{
-		"orderDirection": direction,
-		"orderBy":        by,
-	})
-}
-
-type UserTracksResponse struct {
-	Collection struct {
-		Tracks []UserCollectionTrack `json:"tracks"`
-	} `json:"collection"`
-}
 
 func FollowingCount(id ID) (string, error) {
 	return getGraphqlBody(_followingCount, "followingCount", map[string]any{
@@ -56,48 +15,13 @@ func FollowingCount(id ID) (string, error) {
 
 type FollowingCountResponse struct {
 	Follows struct {
-		Followings Followings `json:"followings"`
+		Followings struct {
+			Count int `json:"count"`
+		} `json:"followings"`
 	} `json:"follows"`
 }
 
-func ProfileFollowersCount(ids []ID) (string, error) {
-	return getGraphqlBody(_profileFollowersCount, "profileFollowersCount", map[string]any{
-		"ids": ids,
-	})
-}
-
-type ProfileFollowersCountResponse struct {
-	Profiles []struct {
-		CollectionItemData struct {
-			LikesCount int `json:"likesCount"`
-		} `json:"collectionItemData"`
-	} `json:"profiles"`
-}
-
-func UserPaginatedPodcasts(cursor string, count int) (string, error) {
-	return getGraphqlBody(_userPaginatedPodcasts, "userPaginatedPodcasts", map[string]any{
-		"cursor": cursor,
-		"count":  count,
-	})
-}
-
-type UserPaginatedPodcastsResponse struct {
-	PaginatedCollection struct {
-		Podcasts struct {
-			Items []Podcast `json:"items"`
-			Page  struct {
-				EndCursor   string `json:"endCursor"`
-				HasNextPage bool   `json:"hasNextPage"`
-			} `json:"page"`
-		} `json:"podcasts"`
-	} `json:"paginatedCollection"`
-}
-
 type (
-	Followings struct {
-		Count int `json:"count"`
-	}
-
 	// Публичный профиль пользователя.
 	SimpleProfile struct {
 		ID          ID     `json:"id"`

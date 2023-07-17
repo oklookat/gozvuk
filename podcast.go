@@ -7,8 +7,8 @@ import (
 )
 
 // Получить подкасты по ID.
-func (c Client) GetPodcasts(ctx context.Context, ids []schema.ID, withEpisodes bool) (*schema.Response[schema.GetPodcastsResponse], error) {
-	body, err := schema.GetPodcasts(ids, withEpisodes)
+func (c Client) GetPodcasts(ctx context.Context, ids []schema.ID) (*schema.Response[schema.GetPodcastsResponse], error) {
+	body, err := schema.GetPodcasts(ids)
 	if err != nil {
 		return nil, err
 	}
@@ -22,13 +22,4 @@ func (c Client) GetEpisodes(ctx context.Context, ids []schema.ID) (*schema.Respo
 		return nil, err
 	}
 	return sendRequestWithBody[schema.GetEpisodesResponse](ctx, c, body)
-}
-
-// Получить эпизоды подкастов по их ID, доступны дополнительные поля.
-func (c Client) Episodes(ctx context.Context, ids []schema.ID) (*schema.Response[schema.EpisodesResponse], error) {
-	body, err := schema.Episodes(ids)
-	if err != nil {
-		return nil, err
-	}
-	return sendRequestWithBody[schema.EpisodesResponse](ctx, c, body)
 }

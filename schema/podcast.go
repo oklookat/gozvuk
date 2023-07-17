@@ -9,14 +9,11 @@ var (
 	_getPodcasts string
 	//go:embed gql/getEpisodes.gql
 	_getEpisodes string
-	//go:embed gql/episodes.gql
-	_episodes string
 )
 
-func GetPodcasts(ids []ID, withEpisodes bool) (string, error) {
+func GetPodcasts(ids []ID) (string, error) {
 	return getGraphqlBody(_getPodcasts, "getPodcasts", map[string]any{
-		"withEpisodes": withEpisodes,
-		"ids":          ids,
+		"ids": ids,
 	})
 }
 
@@ -34,24 +31,14 @@ type GetEpisodesResponse struct {
 	GetEpisodes []Episode `json:"getEpisodes"`
 }
 
-func Episodes(ids []ID) (string, error) {
-	return getGraphqlBody(_episodes, "episodes", map[string]any{
-		"ids": ids,
-	})
-}
-
-type EpisodesResponse struct {
-	GetEpisodes []Episode `json:"getEpisodes"`
-}
-
 type (
 	// Краткая информация о подкасте.
 	SimplePodcast struct {
-		ID       ID                    `json:"id"`
-		Title    string                `json:"title"`
-		Explicit bool                  `json:"explicit"`
-		Image    Image                 `json:"image"`
-		Authors  []SimplePodcastAuthor `json:"authors"`
+		ID       ID              `json:"id"`
+		Title    string          `json:"title"`
+		Explicit bool            `json:"explicit"`
+		Image    Image           `json:"image"`
+		Authors  []PodcastAuthor `json:"authors"`
 	}
 
 	// Подкаст.
@@ -61,13 +48,22 @@ type (
 		// Подкаст лайкнут?
 		CollectionItemData CollectionItem `json:"collectionItemData"`
 
-		Description  *string   `json:"description"`
-		UpdatedDate  *Time     `json:"updatedDate"`
-		Availability *int      `json:"availability"`
-		Type         *string   `json:"type"`
-		Episodes     []Episode `json:"episodes"`
+		Description  string `json:"description"`
+		UpdatedDate  Time   `json:"updatedDate"`
+		Availability int    `json:"availability"`
+		Type         string `json:"type"`
+		Episodes     []struct {
+			ID ID `json:"id"`
+		} `json:"episodes"`
 	}
 
+	// Краткая информация об авторе подкаста.
+	PodcastAuthor struct {
+		ID   ID     `json:"id"`
+		Name string `json:"name"`
+	}
+
+	// Краткая информация об эпизоде подкаста.
 	SimpleEpisode struct {
 		ID              ID     `json:"id"`
 		Title           string `json:"title"`
@@ -83,25 +79,8 @@ type (
 
 		// Эпизод лайкнут?
 		CollectionItemData CollectionItem `json:"collectionItemData"`
-
-		Description  *string  `json:"description"`
-		Availability *int     `json:"availability"`
-		Season       *Season  `json:"season"`
-		Podcast      *Podcast `json:"podcast"`
-		Link         any      `json:"link"`
-		ListenState  any      `json:"listenState"`
-		TrackId      any      `json:"trackId"`
-	}
-
-	// Сезон подкаста.
-	Season struct {
-		ID           ID     `json:"id"`
-		Name         string `json:"name"`
-		SeasonNumber int    `json:"seasonNumber"`
-	}
-
-	SimplePodcastAuthor struct {
-		ID   ID     `json:"id"`
-		Name string `json:"name"`
+		Description        string         `json:"description"`
+		Availability       int            `json:"availability"`
+		Podcast            SimplePodcast  `json:"podcast"`
 	}
 )

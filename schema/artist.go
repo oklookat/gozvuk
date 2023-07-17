@@ -5,8 +5,6 @@ import _ "embed"
 var (
 	//go:embed gql/getArtists.gql
 	_getArtists string
-	//go:embed gql/artistFollowersCount.gql
-	_artistFollowersCount string
 )
 
 func GetArtists(ids []ID,
@@ -30,20 +28,6 @@ type GetArtistsResponse struct {
 	GetArtists []Artist `json:"getArtists"`
 }
 
-func ArtistFollowersCount(ids []ID) (string, error) {
-	return getGraphqlBody(_artistFollowersCount, "artistFollowersCount", map[string]any{
-		"ids": ids,
-	})
-}
-
-type ArtistFollowersCountResponse struct {
-	GetArtists []struct {
-		CollectionItemData struct {
-			LikesCount int `json:"likesCount"`
-		} `json:"collectionItemData"`
-	} `json:"getArtists"`
-}
-
 type (
 	SimpleArtist struct {
 		// ID артиста.
@@ -63,7 +47,11 @@ type (
 		SecondImage *Image `json:"secondImage"`
 
 		// Артист лайкнут?
-		CollectionItemData CollectionItem `json:"collectionItemData"`
+		CollectionItemData struct {
+			CollectionItem
+
+			LikesCount int `json:"likesCount"`
+		} `json:"collectionItemData"`
 
 		// Имя артиста по которому его можно найти(?).
 		SearchTitle string `json:"searchTitle"`

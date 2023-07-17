@@ -1,39 +1,36 @@
-# vars
-# {}
-
 query userCollection {
   collection {
     artists {
       id
-      last_modified: collectionLastModified
+      collectionLastModified
     }
     episodes {
       id
-      last_modified: collectionLastModified
+      collectionLastModified
     }
     podcasts {
       id
-      last_modified: collectionLastModified
+      collectionLastModified
     }
     playlists {
       id
-      last_modified: collectionLastModified
+      collectionLastModified
     }
     synthesisPlaylists {
       id
-      last_modified: collectionLastModified
+      collectionLastModified
     }
     profiles {
       id
-      last_modified: collectionLastModified
+      collectionLastModified
     }
     releases {
       id
-      last_modified: collectionLastModified
+      collectionLastModified
     }
     tracks {
       id
-      last_modified: collectionLastModified
+      collectionLastModified
     }
   }
 }

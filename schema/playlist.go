@@ -154,7 +154,7 @@ type (
 
 	SynthesisPlaylist struct {
 		ID      ID               `json:"id"`
-		Tracks  []Track          `json:"tracks"`
+		Tracks  []SimpleTrack    `json:"tracks"`
 		Authors []PlaylistAuthor `json:"authors"`
 	}
 
