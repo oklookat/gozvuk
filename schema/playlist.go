@@ -25,13 +25,9 @@ var (
 	_synthesisPlaylist string
 )
 
-func GetPlaylists(ids []ID, shortTrackList, uniqueReleases bool,
-	first int) (string, error) {
+func GetPlaylists(ids []ID) (string, error) {
 	return getGraphqlBody(_getPlaylists, "getPlaylists", map[string]any{
-		"shortTrackList": shortTrackList,
-		"first":          first,
-		"uniqueReleases": uniqueReleases,
-		"ids":            ids,
+		"ids": ids,
 	})
 }
 
@@ -39,17 +35,26 @@ type GetPlaylistsResponse struct {
 	GetPlaylists []Playlist `json:"getPlaylists"`
 }
 
-func GetPlaylistTracks(id ID, limit, offset int, withStream bool) (string, error) {
+func GetShortPlaylist(ids []ID) (string, error) {
+	return getGraphqlBody(_getShortPlaylist, "getShortPlaylist", map[string]any{
+		"ids": ids,
+	})
+}
+
+type GetShortPlaylistResponse struct {
+	GetPlaylists []SimplePlaylist `json:"getPlaylists"`
+}
+
+func GetPlaylistTracks(id ID, limit, offset int) (string, error) {
 	return getGraphqlBody(_getPlaylistTracks, "getPlaylistTracks", map[string]any{
-		"limit":      limit,
-		"offset":     offset,
-		"withStream": withStream,
-		"id":         id,
+		"limit":  limit,
+		"offset": offset,
+		"id":     id,
 	})
 }
 
 type GetPlaylistTracksResponse struct {
-	GetPlaylistTracks []Track `json:"playlistTracks"`
+	GetPlaylistTracks []SimpleTrack `json:"playlistTracks"`
 }
 
 func CreatePlaylist(items []PlaylistItem, name string) (string, error) {
@@ -63,62 +68,6 @@ type CreatePlaylistResponse struct {
 	Playlist struct {
 		Create ID `json:"create"`
 	} `json:"playlist"`
-}
-
-func DeletePlaylist(id ID) (string, error) {
-	return getGraphqlBody(_deletePlaylist, "deletePlaylist", map[string]any{
-		"id": id,
-	})
-}
-
-type DeletePlaylistResponse struct {
-	Playlist struct {
-		Delete *ID `json:"delete"`
-	} `json:"playlist"`
-}
-
-func RenamePlaylist(id ID, name string) (string, error) {
-	return getGraphqlBody(_renamePlaylist, "renamePlaylist", map[string]any{
-		"id":   id,
-		"name": name,
-	})
-}
-
-type RenamePlaylistResponse struct {
-	Playlist struct {
-		Rename struct {
-			ID   *ID     `json:"id"`
-			Name *string `json:"name"`
-		} `json:"rename"`
-	} `json:"playlist"`
-}
-
-func SetPlaylistToPublic(id ID, isPublic bool) (string, error) {
-	return getGraphqlBody(_setPlaylistToPublic, "setPlaylistToPublic", map[string]any{
-		"id":       id,
-		"isPublic": isPublic,
-	})
-}
-
-type SetPlaylistToPublicResponse struct {
-	Playlist struct {
-		SetPublic struct {
-			ID       *ID   `json:"id"`
-			IsPublic *bool `json:"isPublic"`
-		} `json:"setPublic"`
-	} `json:"playlist"`
-}
-
-func GetShortPlaylist(ids []ID, first int, uniqueReleases bool) (string, error) {
-	return getGraphqlBody(_getShortPlaylist, "getShortPlaylist", map[string]any{
-		"first":          first,
-		"uniqueReleases": uniqueReleases,
-		"ids":            ids,
-	})
-}
-
-type GetShortPlaylistResponse struct {
-	GetPlaylists []Playlist `json:"getPlaylists"`
 }
 
 func SynthesisPlaylistBuild(firstAuthor, secondAuthor ID) (string, error) {
@@ -142,55 +91,83 @@ type SynthesisPlaylistResponse struct {
 	SynthesisPlaylist []SynthesisPlaylist `json:"synthesisPlaylist"`
 }
 
+func DeletePlaylist(id ID) (string, error) {
+	return getGraphqlBody(_deletePlaylist, "deletePlaylist", map[string]any{
+		"id": id,
+	})
+}
+
+func RenamePlaylist(id ID, name string) (string, error) {
+	return getGraphqlBody(_renamePlaylist, "renamePlaylist", map[string]any{
+		"id":   id,
+		"name": name,
+	})
+}
+
+func SetPlaylistToPublic(id ID, isPublic bool) (string, error) {
+	return getGraphqlBody(_setPlaylistToPublic, "setPlaylistToPublic", map[string]any{
+		"id":       id,
+		"isPublic": isPublic,
+	})
+}
+
 type (
-	// Плейлист.
-	Playlist struct {
+	// Краткая информация о плейлисте.
+	SimplePlaylist struct {
 		ID ID `json:"id"`
 
 		// Название.
 		Title string `json:"title"`
 
-		// Описание.
-		Description *string `json:"description"`
-
-		// Я не знаю в чем разница между IsPublic и Is_Public. Легаси?
-		Is_Public *bool `json:"is_public"`
-
 		// Плейлист публичный?
-		IsPublic *bool `json:"isPublic"`
+		IsPublic bool `json:"isPublic"`
 
-		CollectionLastModified *Time `json:"collectionLastModified"`
-		Updated                *Time `json:"updated"`
+		// Описание.
+		Description string `json:"description"`
 
-		// ID автора.
-		UserID *string `json:"userId"`
+		// Общая длина треков в секундах.
+		Duration int `json:"duration"`
 
+		// Обложка.
 		Image *Image `json:"image"`
+	}
+
+	// Плейлист.
+	Playlist struct {
+		SimplePlaylist
 
 		// Треки.
-		Tracks []Track `json:"tracks"`
+		Tracks []struct {
+			ID ID `json:"id"`
+		} `json:"tracks"`
 
-		// ???.
-		Ftracks []Track `json:"ftracks"`
+		// ID автора.
+		UserID    string `json:"userId"`
+		IsDeleted bool   `json:"isDeleted"`
+		Shared    bool   `json:"shared"`
+		Branded   bool   `json:"branded"`
 
-		// В секундах.
-		Duration *int `json:"duration"`
-
-		Branded *bool `json:"branded"`
-
-		Cover   any    `json:"cover"`
-		CoverV1 *Image `json:"coverV1"`
-
-		SearchTitle *string `json:"searchTitle"`
-		Buttons     []any   `json:"buttons"`
-		IsDeleted   *bool   `json:"isDeleted"`
-		Shared      *bool   `json:"shared"`
+		// Дата обновления.
+		Updated     Time   `json:"updated"`
+		SearchTitle string `json:"searchTitle"`
 	}
 
 	SynthesisPlaylist struct {
-		ID      ID       `json:"id"`
-		Tracks  []Track  `json:"tracks"`
-		Authors []Author `json:"authors"`
+		ID      ID               `json:"id"`
+		Tracks  []Track          `json:"tracks"`
+		Authors []PlaylistAuthor `json:"authors"`
+	}
+
+	PlaylistAuthor struct {
+		ID    ID     `json:"id"`
+		Name  string `json:"name"`
+		Image *Image `json:"image"`
+
+		// Совпадение по вкусам.
+		Matches *struct {
+			// Коэффициент.
+			Score float64 `json:"score"`
+		} `json:"matches"`
 	}
 )
 

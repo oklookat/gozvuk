@@ -25,7 +25,7 @@ func TestFullTrack(t *testing.T) {
 	ctx := context.Background()
 	cl := getClient(t)
 
-	resp, err := cl.GetFullTrack(ctx, _trackIds[:4], true, true)
+	resp, err := cl.GetFullTrack(ctx, _trackIds[:4])
 	if err != nil {
 		t.Fatal(err)
 	}

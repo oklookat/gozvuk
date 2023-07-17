@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -38,27 +39,37 @@ func (e Error) Error() string {
 type Image struct {
 	// Высота.
 	H *int `json:"h"`
-	// Пример: #ffffff,#fcfcfb,#282422
-	Palette *string `json:"palette"`
-	// Пример: #ffffff,#2b2726,#887f70
-	PaletteBottom *string `json:"palette_bottom"`
-	// Пример: https://cdn51.zvuk.com/pic?type=release&id=3322849&ext=jpg&size={size}
-	Src string `json:"src"`
+
 	// Ширина.
 	W *int `json:"w"`
+
+	// Пример: https://cdn51.zvuk.com/pic?type=release&id=3322849&ext=jpg&size={size}
+	//
+	// Пример 2: /static/etc...
+	Src string `json:"src"`
 }
 
 // Получить ссылку на изображение.
-func (i Image) URL(width, height int) *url.URL {
-	parsed, _ := url.Parse(i.Src)
-	if parsed == nil {
+//
+// Ссылка может быть не всегда нужного размера.
+// Например когда картинка ведет на /static zvuk.com.
+func (i Image) SrcURL(width, height int) *url.URL {
+	src := i.Src
+	if strings.HasPrefix(src, "/") {
+		// static.
+		src = "https://zvuk.com" + src
+	}
+	parsed, err := url.Parse(src)
+	if err != nil {
 		return nil
 	}
-	w := strconv.Itoa(width)
-	h := strconv.Itoa(height)
-	query := parsed.Query()
-	query.Set("size", w+"x"+h)
-	parsed.RawQuery = query.Encode()
+	if len(parsed.Query().Get("size")) > 0 {
+		w := strconv.Itoa(width)
+		h := strconv.Itoa(height)
+		query := parsed.Query()
+		query.Set("size", w+"x"+h)
+		parsed.RawQuery = query.Encode()
+	}
 	return parsed
 }
 
@@ -104,14 +115,6 @@ type (
 		Gradient any    `json:"gradient"`
 	}
 
-	Animation struct {
-		ArtistID ID              `json:"artistId"`
-		Effect   AnimationEffect `json:"effect"`
-		// Например ссылка на изображение.
-		Image      string     `json:"image"`
-		Background Background `json:"background"`
-	}
-
 	// Лейбл / мейджор.
 	Label struct {
 		// ID лейбла.
@@ -119,11 +122,6 @@ type (
 
 		// Название лейбла.
 		Title string `json:"title"`
-
-		SearchTitle *string `json:"searchTitle"`
-		Description *string `json:"description"`
-		Image       *Image  `json:"image"`
-		HasImage    *bool   `json:"hasImage"`
 	}
 )
 
@@ -206,12 +204,4 @@ type BackgroundType string
 const (
 	// Картинка.
 	BackgroundTypeImage BackgroundType = "image"
-)
-
-// Эффект анимации.
-type AnimationEffect string
-
-const (
-	// Вправо.
-	AnimationEffectToRight AnimationEffect = "toRight"
 )

@@ -1,10 +1,15 @@
 package schema
 
 type (
+	SimpleBook struct {
+		ID          ID       `json:"id"`
+		Title       string   `json:"title"`
+		AuthorNames []string `json:"authorNames"`
+	}
+
 	Book struct {
-		ID           ID       `json:"id"`
-		Availability int      `json:"availability"`
-		Title        string   `json:"title"`
-		AuthorNames  []string `json:"authorNames"`
+		SimpleBook
+
+		Availability int `json:"availability"`
 	}
 )

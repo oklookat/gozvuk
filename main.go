@@ -1,8 +1,6 @@
 package gozvuk
 
 import (
-	"context"
-
 	"github.com/oklookat/gozvuk/schema"
 	"github.com/oklookat/vantuz"
 )
@@ -39,30 +37,4 @@ type Client struct {
 // Установить user agent для запросов.
 func (c *Client) SetUserAgent(val string) {
 	c.Http.SetUserAgent(val)
-}
-
-// Получить текущий аккаунт.
-func (c Client) Profile() (*schema.Profile, error) {
-	var respErr schema.Error
-	var result schema.Profile
-	_, err := c.Http.R().SetError(&respErr).SetResult(&result).Get(context.Background(), genApiPathTiny("profile"))
-	if err != nil {
-		return nil, wrapError(err)
-	}
-	if len(respErr.Detail) == 0 {
-		return &result, nil
-	}
-	return &result, respErr
-}
-
-// Валидный токен / пользователь авторизован?
-func (c Client) IsAuthorized() (bool, error) {
-	profile, err := c.Profile()
-	if err != nil {
-		return false, err
-	}
-	if profile.Result.IsAnonymous != nil && *profile.Result.IsAnonymous {
-		return false, nil
-	}
-	return true, nil
 }

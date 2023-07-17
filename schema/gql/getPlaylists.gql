@@ -1,105 +1,21 @@
-# vars
-# {
-#   "shortTrackList": false,
-#   "first": 4,
-#   "uniqueReleases": true,
-#   "ids": []
-# }
-
-query getPlaylists(
-  $ids: [ID!]!
-  $shortTrackList: Boolean = false
-  $first: Int = 4
-  $uniqueReleases: Boolean = true
-) {
+query getPlaylists($ids: [ID!]!) {
   getPlaylists(ids: $ids) {
     id
     title
-    search_title: searchTitle
-    updated
+    isPublic
     description
+    duration
     image {
       src
-      palette
-      palette_bottom: paletteBottom
     }
-    tracks @skip(if: $shortTrackList) {
+    tracks {
       id
-      credits
-      title
-      searchTitle
-      position
-      duration
-      availability
-      artistTemplate
-      condition
-      explicit
-      lyrics
-      hasFlac
-      zchan
-      artists {
-        id
-        title
-      }
-      release {
-        id
-        title
-        image {
-          src
-          palette
-          paletteBottom
-        }
-      }
     }
-    ftracks(first: $first, uniqueReleases: $uniqueReleases) {
-      id
-      credits
-      title
-      searchTitle
-      position
-      duration
-      availability
-      artistTemplate
-      condition
-      explicit
-      lyrics
-      hasFlac
-      zchan
-      artists {
-        id
-        title
-      }
-      release {
-        id
-        title
-        image {
-          src
-          palette
-          paletteBottom
-        }
-      }
-    }
-    buttons {
-      title
-      action {
-        ... on OpenUrlAction {
-          name
-          url
-          fallbackUrl
-          inWebkit
-          auth
-        }
-      }
-    }
-    branded
-    cover {
-      src
-    }
-    is_public: isPublic
-    isPublic
-    duration
-    isDeleted
     userId
+    isDeleted
     shared
+    branded
+    updated
+    searchTitle
   }
 }

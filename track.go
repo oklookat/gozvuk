@@ -16,9 +16,8 @@ func (c Client) GetTracks(ctx context.Context, ids []schema.ID) (*schema.Respons
 }
 
 // Получить полные треки по ID.
-func (c Client) GetFullTrack(ctx context.Context, ids []schema.ID,
-	withReleases, withArtists bool) (*schema.Response[schema.GetFullTrackResponse], error) {
-	body, err := schema.GetFullTrack(ids, withReleases, withArtists)
+func (c Client) GetFullTrack(ctx context.Context, ids []schema.ID) (*schema.Response[schema.GetFullTrackResponse], error) {
+	body, err := schema.GetFullTrack(ids)
 	if err != nil {
 		return nil, err
 	}

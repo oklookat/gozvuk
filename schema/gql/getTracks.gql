@@ -1,35 +1,31 @@
-# vars
-# {
-#   "ids": [
-#     NUMBER_ID_HERE,
-#   ]
-# }
-
 query getTracks($ids: [ID!]!) {
   getTracks(ids: $ids) {
     id
     title
-    searchTitle
-    position
     duration
-    availability
-    artistTemplate
-    condition
     explicit
-    lyrics
-    zchan
-    hasFlac
     artists {
-      id
-      title
-    }
-    release {
       id
       title
       image {
         src
-        palette
-        paletteBottom
+      }
+    }
+    release {
+      id
+      title
+      date
+      type
+      image {
+        src
+      }
+      explicit
+      artists {
+        id
+        title
+        image {
+          src
+        }
       }
     }
   }

@@ -12,7 +12,7 @@ func TestSearch(t *testing.T) {
 	cl := getClient(t)
 
 	args := schema.SearchArguments{
-		Query:      "Crystal",
+		Query:      "crystal",
 		Limit:      5,
 		Tracks:     true,
 		Artists:    true,
@@ -43,9 +43,15 @@ func TestQuickSearch(t *testing.T) {
 	ctx := context.Background()
 	cl := getClient(t)
 
-	resp, err := cl.QuickSearch(ctx, "Crystal", 5, "")
+	_, err := cl.QuickSearch(ctx, "after hours", 5, "")
 	if err != nil {
 		t.Fatal(err)
 	}
-	println(resp)
+	// for _, sr := range resp.Data.QuickSearch.Releases {
+	// 	urld := sr.Image.SrcURL(100, 100)
+	// 	if urld != nil {
+	// 		println(urld.String())
+	// 	}
+	// }
+	// println(resp)
 }

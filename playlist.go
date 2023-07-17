@@ -7,9 +7,8 @@ import (
 )
 
 // Получить плейлисты по ID.
-func (c Client) GetPlaylists(ctx context.Context, ids []schema.ID, shortTrackList, uniqueReleases bool,
-	first int) (*schema.Response[schema.GetPlaylistsResponse], error) {
-	body, err := schema.GetPlaylists(ids, shortTrackList, uniqueReleases, first)
+func (c Client) GetPlaylists(ctx context.Context, ids []schema.ID) (*schema.Response[schema.GetPlaylistsResponse], error) {
+	body, err := schema.GetPlaylists(ids)
 	if err != nil {
 		return nil, err
 	}
@@ -18,8 +17,8 @@ func (c Client) GetPlaylists(ctx context.Context, ids []schema.ID, shortTrackLis
 
 // Получить треки плейлиста.
 func (c Client) GetPlaylistTracks(ctx context.Context, id schema.ID,
-	limit, offset int, withStream bool) (*schema.Response[schema.GetPlaylistTracksResponse], error) {
-	body, err := schema.GetPlaylistTracks(id, limit, offset, withStream)
+	limit, offset int) (*schema.Response[schema.GetPlaylistTracksResponse], error) {
+	body, err := schema.GetPlaylistTracks(id, limit, offset)
 	if err != nil {
 		return nil, err
 	}
@@ -36,36 +35,35 @@ func (c Client) CreatePlaylist(ctx context.Context, items []schema.PlaylistItem,
 }
 
 // Удалить плейлист.
-func (c Client) DeletePlaylist(ctx context.Context, id schema.ID) (*schema.Response[schema.DeletePlaylistResponse], error) {
+func (c Client) DeletePlaylist(ctx context.Context, id schema.ID) (*schema.Response[any], error) {
 	body, err := schema.DeletePlaylist(id)
 	if err != nil {
 		return nil, err
 	}
-	return sendRequestWithBody[schema.DeletePlaylistResponse](ctx, c, body)
+	return sendRequestWithBody[any](ctx, c, body)
 }
 
 // Переименовать плейлист.
-func (c Client) RenamePlaylist(ctx context.Context, id schema.ID, newName string) (*schema.Response[schema.RenamePlaylistResponse], error) {
+func (c Client) RenamePlaylist(ctx context.Context, id schema.ID, newName string) (*schema.Response[any], error) {
 	body, err := schema.RenamePlaylist(id, newName)
 	if err != nil {
 		return nil, err
 	}
-	return sendRequestWithBody[schema.RenamePlaylistResponse](ctx, c, body)
+	return sendRequestWithBody[any](ctx, c, body)
 }
 
 // Изменить видимость плейлиста.
-func (c Client) SetPlaylistToPublic(ctx context.Context, id schema.ID, isPublic bool) (*schema.Response[schema.SetPlaylistToPublicResponse], error) {
+func (c Client) SetPlaylistToPublic(ctx context.Context, id schema.ID, isPublic bool) (*schema.Response[any], error) {
 	body, err := schema.SetPlaylistToPublic(id, isPublic)
 	if err != nil {
 		return nil, err
 	}
-	return sendRequestWithBody[schema.SetPlaylistToPublicResponse](ctx, c, body)
+	return sendRequestWithBody[any](ctx, c, body)
 }
 
 // Получить плейлисты в коротком варианте.
-func (c Client) GetShortPlaylist(ctx context.Context, ids []schema.ID,
-	first int, uniqueReleases bool) (*schema.Response[schema.GetShortPlaylistResponse], error) {
-	body, err := schema.GetShortPlaylist(ids, first, uniqueReleases)
+func (c Client) GetShortPlaylist(ctx context.Context, ids []schema.ID) (*schema.Response[schema.GetShortPlaylistResponse], error) {
+	body, err := schema.GetShortPlaylist(ids)
 	if err != nil {
 		return nil, err
 	}

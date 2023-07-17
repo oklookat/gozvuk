@@ -1,25 +1,3 @@
-# vars
-# {
-#   "limit": 3,
-#   "tracks": true,
-#   "trackCursor": null,
-#   "artistsCursor": null,
-#   "releasesCursor": null,
-#   "playlistsCursor": null,
-#   "episodesCursor": null,
-#   "profilesCursor": null,
-#   "podcastsCursor": null,
-#   "artists": true,
-#   "releases": true,
-#   "playlists": true,
-#   "profiles": true,
-#   "books": true,
-#   "episodes": true,
-#   "podcasts": true,
-#   "categories": true,
-#   "query": STRING_QUERY_HERE
-# }
-
 query search(
   $query: String
   $limit: Int = 2
@@ -38,7 +16,6 @@ query search(
   $books: Boolean = true
   $episodes: Boolean = true
   $podcasts: Boolean = true
-  $categories: Boolean = true
 ) {
   search(query: $query) {
     searchId
@@ -53,24 +30,30 @@ query search(
       items {
         id
         title
-        availability
-        explicit
-        artistTemplate
-        artists {
-          id
-          title
-        }
-        zchan
-        availability
-        condition
         duration
-        release {
+        explicit
+        artists {
           id
           title
           image {
             src
-            palette
-            paletteBottom
+          }
+        }
+        release {
+          id
+          title
+          date
+          type
+          image {
+            src
+          }
+          explicit
+          artists {
+            id
+            title
+            image {
+              src
+            }
           }
         }
       }
@@ -86,15 +69,8 @@ query search(
       items {
         id
         title
-        searchTitle
-        description
         image {
           src
-          palette
-          paletteBottom
-        }
-        profile {
-          id
         }
       }
     }
@@ -109,18 +85,18 @@ query search(
       items {
         id
         title
-        searchTitle
-        explicit
-        availability
         date
+        type
+        image {
+          src
+        }
+        explicit
         artists {
           id
           title
-        }
-        image {
-          src
-          palette
-          paletteBottom
+          image {
+            src
+          }
         }
       }
     }
@@ -139,38 +115,8 @@ query search(
         isPublic
         description
         duration
-        tracks {
-          id
-          credits
-          title
-          searchTitle
-          position
-          duration
-          availability
-          artistTemplate
-          condition
-          explicit
-          lyrics
-          hasFlac
-          zchan
-          artists {
-            id
-            title
-          }
-          release {
-            id
-            title
-            image {
-              src
-              palette
-              paletteBottom
-            }
-          }
-        }
         image {
           src
-          palette
-          paletteBottom
         }
       }
     }
@@ -202,6 +148,7 @@ query search(
       items {
         id
         title
+        authorNames
       }
     }
     episodes(limit: $limit, cursor: $episodesCursor) @include(if: $episodes) {
@@ -221,19 +168,17 @@ query search(
         publicationDate
         image {
           src
-          palette
-          paletteBottom
         }
         podcast {
           id
+          title
+          explicit
+          image {
+            src
+          }
           authors {
             id
             name
-          }
-          image {
-            src
-            palette
-            paletteBottom
           }
         }
       }
@@ -250,31 +195,12 @@ query search(
         id
         title
         explicit
-        availability
+        image {
+          src
+        }
         authors {
+          id
           name
-        }
-        image {
-          src
-          palette
-          paletteBottom
-        }
-      }
-    }
-    categories(limit: 1) @include(if: $categories) {
-      score
-      items {
-        id
-        title
-        description
-        image {
-          src
-        }
-        webAction {
-          name
-          data {
-            url
-          }
         }
       }
     }

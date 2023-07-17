@@ -1,18 +1,3 @@
-# vars
-# {
-#   "withReleases": false,
-#   "withPopTracks": false,
-#   "withRelatedArtists": false,
-#   "releasesOffset": 0,
-#   "releasesLimit": 100,
-#   "tracksOffset": 0,
-#   "tracksLimit": 100,
-#   "releatedArtistsLimit": 0,
-#   "ids": [
-#     NUMBER_ID_HERE,
-#   ]
-# }
-
 query getArtists(
   $ids: [ID!]!
   $withReleases: Boolean = false
@@ -28,83 +13,74 @@ query getArtists(
   getArtists(ids: $ids) {
     id
     title
+    image {
+      src
+    }
+    secondImage {
+      src
+    }
+    collectionItemData {
+      itemStatus
+      lastModified
+    }
+    searchTitle
     description @include(if: $withDescription)
     releases(offset: $releasesOffset, limit: $releasesLimit)
       @include(if: $withReleases) {
       id
       title
-      searchTitle
-      type
       date
+      type
       image {
         src
-        palette
-        paletteBottom
       }
-      availability
-      artistTemplate
+      explicit
       artists {
         id
         title
+        image {
+          src
+        }
       }
     }
     popularTracks(offset: $tracksOffset, limit: $tracksLimit)
       @include(if: $withPopTracks) {
       id
       title
-      searchTitle
-      release {
+      duration
+      explicit
+      artists {
         id
         title
         image {
           src
-          palette
-          paletteBottom
         }
       }
-      artists {
-        title
+      release {
         id
+        title
+        date
+        type
+        image {
+          src
+        }
+        explicit
+        artists {
+          id
+          title
+          image {
+            src
+          }
+        }
       }
-      position
-      duration
-      availability
-      condition
-      explicit
-      lyrics
-      hasFlac
-      zchan
-      artistTemplate
     }
     relatedArtists(limit: $releatedArtistsLimit)
       @include(if: $withRelatedArtists) {
       id
       title
-      searchTitle
-      description
-      hasPage
       image {
         src
-        palette
-        paletteBottom
       }
-      secondImage {
-        src
-        palette
-        paletteBottom
-      }
-      animation {
-        artistId
-        effect
-        image
-        background {
-          type
-          image
-          color
-          gradient
-        }
-      }
-      collectionLastModified
     }
   }
 }

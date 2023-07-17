@@ -17,68 +17,72 @@ func GetTracks(ids []ID) (string, error) {
 	})
 }
 
+type GetTracksResponse struct {
+	GetTracks []SimpleTrack `json:"getTracks"`
+}
+
+func GetFullTrack(ids []ID) (string, error) {
+	return getGraphqlBody(_getFullTrack, "getFullTrack", map[string]any{
+		"ids": ids,
+	})
+}
+
 type GetFullTrackResponse struct {
 	GetTracks []Track `json:"getTracks"`
 }
 
-func GetFullTrack(ids []ID, withReleases, withArtists bool) (string, error) {
-	return getGraphqlBody(_getFullTrack, "getFullTrack", map[string]any{
-		"withReleases": withReleases,
-		"withArtists":  withArtists,
-		"ids":          ids,
-	})
-}
-
-type GetTracksResponse struct {
-	GetTracks []Track `json:"getTracks"`
-}
-
 type (
-	// Трек.
-	Track struct {
+	// Краткая информация о треке.
+	SimpleTrack struct {
 		ID ID `json:"id"`
 
 		// Название.
-		Title *string `json:"title"`
-
-		// Альтернативное название по которому трек можно найти?
-		SearchTitle *string `json:"searchTitle"`
-
-		Position *int `json:"position"`
+		Title string `json:"title"`
 
 		// Длительность в секундах.
-		Duration *int `json:"duration"`
-
-		Availability   *int    `json:"availability"`
-		ArtistTemplate *string `json:"artistTemplate"`
-		Condition      *string `json:"condition"`
+		Duration int `json:"duration"`
 
 		// Трек с ненормативной лексикой?
-		Explicit *bool `json:"explicit"`
+		Explicit bool `json:"explicit"`
+
+		// Артисты.
+		Artists []SimpleArtist `json:"artists"`
+
+		// Релиз.
+		Release *SimpleRelease `json:"release"`
+	}
+
+	// Трек.
+	Track struct {
+		SimpleTrack
+
+		// Альтернативное название по которому трек можно найти(?).
+		SearchTitle string `json:"searchTitle"`
+
+		Position     int `json:"position"`
+		Availability int `json:"availability"`
+
+		// Пример: {0}
+		ArtistTemplate string `json:"artistTemplate"`
+
+		Condition string `json:"condition"`
 
 		// Текст.
 		Lyrics any `json:"lyrics"`
 
 		// Название лейбла?
-		Zchan *string `json:"zchan"`
+		Zchan string `json:"zchan"`
 
-		CollectionItemData *struct {
-			ItemStatus any `json:"itemStatus"`
-		} `json:"collectionItemData"`
+		// Трек лайкнут?
+		CollectionItemData CollectionItem `json:"collectionItemData"`
 
-		// Артисты.
-		Artists []Artist `json:"artists"`
+		// Есть FLAC-версия?
+		HasFlac bool `json:"hasFlac"`
 
 		// Имена артистов.
 		ArtistNames []string `json:"artistNames"`
 
-		// Релиз.
-		Release Release `json:"release"`
-
 		// Фиты?
-		Credits *string `json:"credits"`
-
-		// Есть FLAC-версия?
-		HasFlac *bool `json:"hasFlac"`
+		Credits string `json:"credits"`
 	}
 )

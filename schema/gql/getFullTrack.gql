@@ -1,83 +1,46 @@
-# vars
-# {
-#   "withReleases": true,
-#   "withArtists": true,
-#   "ids": [
-#     47785702
-#   ]
-# }
-
-query getFullTrack(
-  $ids: [ID!]!
-  $withReleases: Boolean = false
-  $withArtists: Boolean = false
-) {
+query getFullTrack($ids: [ID!]!) {
   getTracks(ids: $ids) {
     id
     title
+    duration
+    explicit
+    artists {
+      id
+      title
+      image {
+        src
+      }
+    }
+    release {
+      id
+      title
+      date
+      type
+      image {
+        src
+      }
+      explicit
+      artists {
+        id
+        title
+        image {
+          src
+        }
+      }
+    }
     searchTitle
     position
-    duration
     availability
     artistTemplate
     condition
-    explicit
     lyrics
     zchan
     collectionItemData {
       itemStatus
-    }
-    artists @include(if: $withArtists) {
-      id
-      title
-      searchTitle
-      description
-      hasPage
-      image {
-        src
-        palette
-        paletteBottom
-      }
-      secondImage {
-        src
-        palette
-        paletteBottom
-      }
-      animation {
-        artistId
-        effect
-        image
-        background {
-          type
-          image
-          color
-          gradient
-        }
-      }
-    }
-    release @include(if: $withReleases) {
-      id
-      title
-      searchTitle
-      type
-      date
-      image {
-        src
-        palette
-        paletteBottom
-      }
-      genres {
-        id
-        name
-        shortName
-      }
-      label {
-        id
-        title
-      }
-      availability
-      artistTemplate
+      lastModified
     }
     hasFlac
+    artistNames
+    credits
   }
 }

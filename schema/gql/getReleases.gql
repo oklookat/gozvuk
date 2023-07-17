@@ -1,96 +1,80 @@
-# vars
-# {
-#   "withTracks": false,
-#   "withArtists": true,
-#   "withLabel": false,
-#   "withRelated": false,
-#   "relatedLimit": 100,
-#   "ids": [
-#     NUMBER_ID_HERE,
-#   ]
-# }
-
-# Получить релизы (альбомы, EP, etc)
-query getReleases(
-  $ids: [ID!]!
-  $withTracks: Boolean = false
-  $withArtists: Boolean = false
-  $withLabel: Boolean = false
-  $withRelated: Boolean = false
-  $relatedLimit: Int = 100
-) {
+query getReleases($ids: [ID!]!, $relatedLimit: Int = 100) {
   getReleases(ids: $ids) {
     id
     title
-    searchTitle
-    type
     date
+    type
+    image {
+      src
+    }
+    explicit
+    artists {
+      id
+      title
+      image {
+        src
+      }
+    }
+    collectionItemData {
+      itemStatus
+      lastModified
+    }
+    searchTitle
     genres {
       id
       name
       shortName
     }
-    image {
-      src
-      palette
-      paletteBottom
-    }
-    artists @include(if: $withArtists) {
+    tracks {
       id
       title
-    }
-    tracks @include(if: $withTracks) {
-      id
-      title
-      searchTitle
       duration
-      position
-      availability
-      artistTemplate
-      condition
       explicit
-      lyrics
-      hasFlac
-      zchan
       artists {
         id
         title
+        image {
+          src
+        }
+      }
+      release {
+        id
+        title
+        date
+        type
+        image {
+          src
+        }
+        explicit
+        artists {
+          id
+          title
+          image {
+            src
+          }
+        }
       }
     }
-    label @include(if: $withLabel) {
+    label {
       id
       title
-      searchTitle
-      description
-      image {
-        src
-        palette
-        paletteBottom
-      }
-      hasImage
     }
-    related(limit: $relatedLimit) @include(if: $withRelated) {
+    related(limit: $relatedLimit) {
       id
       title
-      searchTitle
-      type
       date
-      genres {
-        id
-        name
-        shortName
-      }
+      type
       image {
         src
-        palette
-        paletteBottom
       }
+      explicit
       artists {
         id
         title
+        image {
+          src
+        }
       }
-      availability
-      artistTemplate
     }
     availability
     artistTemplate

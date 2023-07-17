@@ -7,10 +7,8 @@ import (
 )
 
 // Получить релизы по ID.
-func (c Client) GetReleases(ctx context.Context, ids []schema.ID,
-	withTracks bool, withArtists bool,
-	withLabel bool, withRelated bool, relatedLimit int) (*schema.Response[schema.GetReleasesResponse], error) {
-	body, err := schema.GetReleases(ids, withTracks, withArtists, withLabel, withRelated, relatedLimit)
+func (c Client) GetReleases(ctx context.Context, ids []schema.ID, relatedLimit int) (*schema.Response[schema.GetReleasesResponse], error) {
+	body, err := schema.GetReleases(ids, relatedLimit)
 	if err != nil {
 		return nil, err
 	}

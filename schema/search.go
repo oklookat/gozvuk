@@ -76,18 +76,15 @@ type (
 
 	// Результат поиска.
 	Search struct {
-		SearchID  string                       `json:"searchId"`
-		Tracks    *SearchResult[Track]         `json:"tracks"`
-		Artists   *SearchResult[Artist]        `json:"artists"`
-		Releases  *SearchResult[Release]       `json:"releases"`
-		Playlists *SearchResult[Playlist]      `json:"playlists"`
-		Profiles  *SearchResult[PublicProfile] `json:"profiles"`
-		Books     *SearchResult[Book]          `json:"books"`
-		Episodes  *SearchResult[Episode]       `json:"episodes"`
-		Podcasts  *SearchResult[Podcast]       `json:"podcasts"`
-
-		// Я не знаю что это.
-		Categories *SearchResult[any] `json:"categories"`
+		SearchID  string                        `json:"searchId"`
+		Tracks    *SearchResult[SimpleTrack]    `json:"tracks"`
+		Artists   *SearchResult[SimpleArtist]   `json:"artists"`
+		Releases  *SearchResult[SimpleRelease]  `json:"releases"`
+		Playlists *SearchResult[SimplePlaylist] `json:"playlists"`
+		Profiles  *SearchResult[SimpleProfile]  `json:"profiles"`
+		Books     *SearchResult[SimpleBook]     `json:"books"`
+		Episodes  *SearchResult[SimpleEpisode]  `json:"episodes"`
+		Podcasts  *SearchResult[SimplePodcast]  `json:"podcasts"`
 	}
 
 	// Результат поиска.
@@ -137,14 +134,14 @@ type QuickSearch struct {
 	// Поля ниже не входят в ответ.
 	// Автоматический демаршал Content. Для удобства.
 
-	Tracks    []Track         `json:"-"`
-	Artists   []Artist        `json:"-"`
-	Releases  []Release       `json:"-"`
-	Playlists []Playlist      `json:"-"`
-	Episodes  []Episode       `json:"-"`
-	Podcasts  []Podcast       `json:"-"`
-	Profiles  []PublicProfile `json:"-"`
-	Books     []Book          `json:"-"`
+	Tracks    []SimpleTrack    `json:"-"`
+	Artists   []SimpleArtist   `json:"-"`
+	Releases  []SimpleRelease  `json:"-"`
+	Playlists []SimplePlaylist `json:"-"`
+	Episodes  []SimpleEpisode  `json:"-"`
+	Podcasts  []SimplePodcast  `json:"-"`
+	Profiles  []SimpleProfile  `json:"-"`
+	Books     []SimpleBook     `json:"-"`
 }
 
 func (q *QuickSearch) UnmarshalJSON(data []byte) error {
@@ -171,7 +168,7 @@ func (q *QuickSearch) UnmarshalJSON(data []byte) error {
 
 		switch Typename(typeNameStr) {
 		case TypenameArtist:
-			var conv Artist
+			var conv SimpleArtist
 			if err := q.remarshal(theEnt, &conv); err != nil {
 				continue
 			}
@@ -179,49 +176,49 @@ func (q *QuickSearch) UnmarshalJSON(data []byte) error {
 			continue
 
 		case TypenameTrack:
-			var conv Track
+			var conv SimpleTrack
 			if err := q.remarshal(theEnt, &conv); err != nil {
 				continue
 			}
 			q.Tracks = append(q.Tracks, conv)
 			continue
 		case TypenameRelease:
-			var conv Release
+			var conv SimpleRelease
 			if err := q.remarshal(theEnt, &conv); err != nil {
 				continue
 			}
 			q.Releases = append(q.Releases, conv)
 			continue
 		case TypenamePlaylist:
-			var conv Playlist
+			var conv SimplePlaylist
 			if err := q.remarshal(theEnt, &conv); err != nil {
 				continue
 			}
 			q.Playlists = append(q.Playlists, conv)
 			continue
 		case TypenameEpisode:
-			var conv Episode
+			var conv SimpleEpisode
 			if err := q.remarshal(theEnt, &conv); err != nil {
 				continue
 			}
 			q.Episodes = append(q.Episodes, conv)
 			continue
 		case TypenamePodcast:
-			var conv Podcast
+			var conv SimplePodcast
 			if err := q.remarshal(theEnt, &conv); err != nil {
 				continue
 			}
 			q.Podcasts = append(q.Podcasts, conv)
 			continue
 		case TypenameProfile:
-			var conv PublicProfile
+			var conv SimpleProfile
 			if err := q.remarshal(theEnt, &conv); err != nil {
 				continue
 			}
 			q.Profiles = append(q.Profiles, conv)
 			continue
 		case TypenameBook:
-			var conv Book
+			var conv SimpleBook
 			if err := q.remarshal(theEnt, &conv); err != nil {
 				continue
 			}

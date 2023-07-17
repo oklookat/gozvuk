@@ -2,11 +2,41 @@
 
 Неофициальный клиент для API [zvuk.com](https://zvuk.com).
 
-На данный момент в разработке.
-Нужно реализовать методы, а после сделать нормальные поля ответа,
-отредактировав graphql запросы.
+На данный момент в разработке. Редактирую запросы и ответы.
 
-# Реализовано
+# Реализовано (refactored)
+
+- [x] search
+
+- [x] quickSearch
+
+- [x] getArtists
+
+- [x] getFullTrack
+
+- [x] getTracks
+
+- [x] getReleases
+
+- [x] getPlaylists
+
+- [x] getPlaylistTracks
+
+- [x] getShortPlaylist
+
+- [ ] getEpisodes
+
+- [ ] userPlaylists
+
+- [ ] userTracks
+
+- [ ] getAllHiddenCollection
+
+- [ ] getHiddenTracks
+
+- [ ] getPodcasts
+
+# Реализовано, но возможно нужен рефакторинг
 
 - [x] addItemToCollection
 
@@ -22,28 +52,6 @@
 
 - [x] followingCount
 
-- [x] getAllHiddenCollection
-
-- [x] getArtists
-
-- [x] getEpisodes
-
-- [x] getFullTrack
-
-- [x] getHiddenTracks
-
-- [x] getPlaylists
-
-- [x] getPlaylistTracks
-
-- [x] getPodcasts
-
-- [x] getReleases
-
-- [x] getShortPlaylist
-
-- [x] getTracks
-
 - [ ] listenedEpisodes
 
 - [ ] listeningHistory
@@ -52,15 +60,11 @@
 
 - [x] profileFollowersCount
 
-- [x] quickSearch
-
 - [x] removeItemFromCollection
 
 - [x] removeItemFromHidden
 
 - [x] renamePlaylist
-
-- [x] search
 
 - [x] setPlaylistToPublic
 
@@ -71,7 +75,3 @@
 - [x] userCollection
 
 - [x] userPaginatedPodcasts
-
-- [x] userPlaylists
-
-- [x] userTracks

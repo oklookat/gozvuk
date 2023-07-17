@@ -7,12 +7,8 @@ var (
 	_getReleases string
 )
 
-func GetReleases(ids []ID, withTracks, withArtists, withLabel, withRelated bool, relatedLimit int) (string, error) {
+func GetReleases(ids []ID, relatedLimit int) (string, error) {
 	return getGraphqlBody(_getReleases, "getReleases", map[string]any{
-		"withTracks":   withTracks,
-		"withArtists":  withArtists,
-		"withLabel":    withLabel,
-		"withRelated":  withRelated,
 		"relatedLimit": relatedLimit,
 		"ids":          ids,
 	})
@@ -23,28 +19,55 @@ type GetReleasesResponse struct {
 }
 
 type (
+	// Краткая информация о релизе.
+	SimpleRelease struct {
+		ID ID `json:"id"`
+
+		// Название.
+		Title string `json:"title"`
+
+		// Дата релиза.
+		Date Time `json:"date"`
+
+		// Тип релиза.
+		Type ReleaseType `json:"type"`
+
+		// Обложка.
+		Image Image `json:"image"`
+
+		// Релиз с ненормативной лексикой?
+		Explicit bool `json:"explicit"`
+
+		// Исполнители.
+		Artists []SimpleArtist `json:"artists"`
+	}
+
 	// Например альбом.
 	Release struct {
-		ID          ID           `json:"id"`
-		Title       string       `json:"title"`
-		SearchTitle *string      `json:"searchTitle"`
-		Type        *ReleaseType `json:"type"`
-		Date        *Time        `json:"date"`
-		Genres      []Genre      `json:"genres"`
-		Image       *Image       `json:"image"`
-		Artists     []Artist     `json:"artists"`
-		Tracks      []Track      `json:"tracks"`
-		Label       *Label       `json:"label"`
-		// Схожие релизы (ремиксы, и так далее)?
-		Related        []Release `json:"related"`
-		Availability   *int      `json:"availability"`
-		ArtistTemplate *string   `json:"artistTemplate"`
+		SimpleRelease
+
+		// Релиз лайкнут?
+		CollectionItemData CollectionItem `json:"collectionItemData"`
+		SearchTitle        string         `json:"searchTitle"`
+		Genres             []Genre        `json:"genres"`
+
+		// Треки (без поля Release).
+		Tracks  []SimpleTrack  `json:"tracks"`
+		Artists []SimpleArtist `json:"artists"`
+
+		// Схожие релизы. Ремиксы, делюкс-версии, и так далее.
+		Related []SimpleRelease `json:"related"`
+
+		// Лейбл.
+		Label          Label  `json:"label"`
+		Availability   int    `json:"availability"`
+		ArtistTemplate string `json:"artistTemplate"`
 	}
 
 	// Жанр.
 	Genre struct {
 		// ID жанра.
-		ID *ID `json:"id"`
+		ID ID `json:"id"`
 
 		// Название жанра.
 		Name string `json:"name"`

@@ -11,7 +11,7 @@ func TestGetPlaylists(t *testing.T) {
 	ctx := context.Background()
 	cl := getClient(t)
 
-	resp, err := cl.GetPlaylists(ctx, _playlistIds[:], true, true, 4)
+	resp, err := cl.GetPlaylists(ctx, _playlistIds[:4])
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -24,7 +24,7 @@ func TestGetPlaylistTracks(t *testing.T) {
 	ctx := context.Background()
 	cl := getClient(t)
 
-	resp, err := cl.GetPlaylistTracks(ctx, _playlistIds[0], 10, 0, false)
+	resp, err := cl.GetPlaylistTracks(ctx, _playlistIds[0], 10, 0)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -81,7 +81,7 @@ func TestGetShortPlaylist(t *testing.T) {
 	ctx := context.Background()
 	cl := getClient(t)
 
-	resp, err := cl.GetShortPlaylist(ctx, _playlistIds[:4], 3, true)
+	resp, err := cl.GetShortPlaylist(ctx, _playlistIds[:4])
 	if err != nil {
 		t.Fatal(err)
 	}

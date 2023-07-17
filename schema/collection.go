@@ -97,10 +97,16 @@ type (
 	}
 
 	UserCollectionTrack struct {
-		ID                 ID `json:"id"`
-		CollectionItemData struct {
-			LastModified *Time `json:"lastModified"`
-		} `json:"collectionItemData"`
+		ID                 ID             `json:"id"`
+		CollectionItemData CollectionItem `json:"collectionItemData"`
+	}
+
+	CollectionItem struct {
+		// Статус. Может быть nil, как и LastModified.
+		ItemStatus *CollectionItemStatus `json:"itemStatus"`
+
+		// Дата добавления в коллекцию.
+		LastModified *Time `json:"lastModified"`
 	}
 )
 
@@ -122,4 +128,12 @@ const (
 
 	// Эпизод подкаста.
 	CollectionItemTypeEpisode CollectionItemType = "episode"
+)
+
+// Статус сущности в коллекции.
+type CollectionItemStatus string
+
+const (
+	// Лайкнута.
+	CollectionItemStatusLiked CollectionItemStatus = "liked"
 )

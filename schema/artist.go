@@ -26,6 +26,10 @@ func GetArtists(ids []ID,
 	})
 }
 
+type GetArtistsResponse struct {
+	GetArtists []Artist `json:"getArtists"`
+}
+
 func ArtistFollowersCount(ids []ID) (string, error) {
 	return getGraphqlBody(_artistFollowersCount, "artistFollowersCount", map[string]any{
 		"ids": ids,
@@ -41,30 +45,42 @@ type ArtistFollowersCountResponse struct {
 }
 
 type (
-	GetArtistsResponse struct {
-		GetArtists []Artist `json:"getArtists"`
-	}
-
-	Artist struct {
+	SimpleArtist struct {
+		// ID артиста.
 		ID ID `json:"id"`
 
-		Title *string `json:"title"`
-
-		SearchTitle *string  `json:"searchTitle"`
-		Description *string  `json:"description"`
-		HasPage     *bool    `json:"hasPage"`
-		Profile     *Profile `json:"profile"`
+		// Имя артиста.
+		Title string `json:"title"`
 
 		// Фото артиста.
 		Image *Image `json:"image"`
+	}
+
+	Artist struct {
+		SimpleArtist
 
 		// Дополнительное фото артиста.
 		SecondImage *Image `json:"secondImage"`
 
-		Animation              *Animation `json:"animation"`
-		CollectionLastModified *Time      `json:"collectionLastModified"`
-		Releases               []Release  `json:"releases"`
-		PopularTracks          []Track    `json:"popularTracks"`
-		RelatedArtists         []Artist   `json:"relatedArtists"`
+		// Артист лайкнут?
+		CollectionItemData CollectionItem `json:"collectionItemData"`
+
+		// Имя артиста по которому его можно найти(?).
+		SearchTitle string `json:"searchTitle"`
+
+		// Об артисте.
+		Description *string `json:"description"`
+
+		Releases       []SimpleRelease `json:"releases"`
+		PopularTracks  []SimpleTrack   `json:"popularTracks"`
+		RelatedArtists []SimpleArtist  `json:"relatedArtists"`
+	}
+
+	// Лайкнутый артист.
+	CollectionArtist struct {
+		SimpleArtist
+
+		// Когда был добавлен(?).
+		CollectionLastModified *Time `json:"collectionLastModified"`
 	}
 )

@@ -99,11 +99,11 @@ type (
 	}
 
 	// Публичный профиль пользователя.
-	PublicProfile struct {
-		ID          string `json:"id"`
+	SimpleProfile struct {
+		ID          ID     `json:"id"`
 		Name        string `json:"name"`
 		Description string `json:"description"`
-		Image       Image  `json:"image"`
+		Image       *Image `json:"image"`
 	}
 
 	Profile struct {

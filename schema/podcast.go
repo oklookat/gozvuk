@@ -45,36 +45,52 @@ type EpisodesResponse struct {
 }
 
 type (
+	// Краткая информация о подкасте.
+	SimplePodcast struct {
+		ID       ID                    `json:"id"`
+		Title    string                `json:"title"`
+		Explicit bool                  `json:"explicit"`
+		Image    Image                 `json:"image"`
+		Authors  []SimplePodcastAuthor `json:"authors"`
+	}
+
 	// Подкаст.
 	Podcast struct {
-		ID           ID        `json:"id"`
-		Title        string    `json:"title"`
+		SimplePodcast
+
+		// Подкаст лайкнут?
+		CollectionItemData CollectionItem `json:"collectionItemData"`
+
 		Description  *string   `json:"description"`
 		UpdatedDate  *Time     `json:"updatedDate"`
-		Explicit     *bool     `json:"explicit"`
 		Availability *int      `json:"availability"`
 		Type         *string   `json:"type"`
-		Image        *Image    `json:"image"`
-		Authors      []Author  `json:"authors"`
 		Episodes     []Episode `json:"episodes"`
+	}
+
+	SimpleEpisode struct {
+		ID              ID     `json:"id"`
+		Title           string `json:"title"`
+		Explicit        bool   `json:"explicit"`
+		Duration        int    `json:"duration"`
+		PublicationDate Time   `json:"publicationDate"`
+		Image           Image  `json:"image"`
 	}
 
 	// Эпизод подкаста.
 	Episode struct {
-		ID              ID       `json:"id"`
-		Title           string   `json:"title"`
-		Description     *string  `json:"description"`
-		Image           *Image   `json:"image"`
-		Explicit        *bool    `json:"explicit"`
-		Availability    *int     `json:"availability"`
-		PublicationDate *Time    `json:"publicationDate"`
-		Duration        *int     `json:"duration"`
-		Season          *Season  `json:"season"`
-		Podcast         *Podcast `json:"podcast"`
+		SimpleEpisode
 
-		Link        any `json:"link"`
-		ListenState any `json:"listenState"`
-		TrackId     any `json:"trackId"`
+		// Эпизод лайкнут?
+		CollectionItemData CollectionItem `json:"collectionItemData"`
+
+		Description  *string  `json:"description"`
+		Availability *int     `json:"availability"`
+		Season       *Season  `json:"season"`
+		Podcast      *Podcast `json:"podcast"`
+		Link         any      `json:"link"`
+		ListenState  any      `json:"listenState"`
+		TrackId      any      `json:"trackId"`
 	}
 
 	// Сезон подкаста.
@@ -82,5 +98,10 @@ type (
 		ID           ID     `json:"id"`
 		Name         string `json:"name"`
 		SeasonNumber int    `json:"seasonNumber"`
+	}
+
+	SimplePodcastAuthor struct {
+		ID   ID     `json:"id"`
+		Name string `json:"name"`
 	}
 )
