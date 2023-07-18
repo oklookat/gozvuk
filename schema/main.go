@@ -83,21 +83,7 @@ type (
 		Errors     []struct {
 			Message    string `json:"message"`
 			Extensions struct {
-				Code        string `json:"code"`
-				ServiceName string `json:"serviceName"`
-				FieldErrors []struct {
-					Loc  []string `json:"loc"`
-					Msg  string   `json:"msg"`
-					Type string   `json:"type"`
-				} `json:"field_errors"`
-				Exception struct {
-					Message   string `json:"message"`
-					Locations []struct {
-						Line   int `json:"line"`
-						Column int `json:"column"`
-					} `json:"locations"`
-					Path []string `json:"path"`
-				} `json:"exception"`
+				Code string `json:"code"`
 			} `json:"extensions"`
 		} `json:"errors"`
 		Message *string `json:"message"`
