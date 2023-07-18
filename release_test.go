@@ -9,7 +9,7 @@ func TestGetReleases(t *testing.T) {
 	ctx := context.Background()
 	cl := getClient(t)
 
-	resp, err := cl.GetReleases(ctx, _albumIds[:4], 5)
+	resp, err := cl.GetReleases(ctx, _albumIds[:4], 1)
 	if err != nil {
 		t.Fatal(err)
 	}
