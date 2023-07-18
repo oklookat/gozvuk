@@ -3,6 +3,7 @@ package schema
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/url"
 	"strconv"
 	"strings"
@@ -78,19 +79,10 @@ type (
 	Response[T any] struct {
 		// Ошибки.
 
-		StatusCode *int    `json:"statusCode"`
-		Error      *string `json:"error"`
-		Errors     []struct {
-			Message    string `json:"message"`
-			Extensions struct {
-				Code        string `json:"code"`
-				ServiceName string `json:"serviceName"`
-				FieldErrors []struct {
-					Msg string `json:"msg"`
-				} `json:"field_errors"`
-			} `json:"extensions"`
-		} `json:"errors"`
-		Message *string `json:"message"`
+		StatusCode *int           `json:"statusCode"`
+		Error      *string        `json:"error"`
+		Errors     ResponseErrors `json:"errors"`
+		Message    *string        `json:"message"`
 
 		// Результат запроса.
 
@@ -114,6 +106,42 @@ type (
 		Title string `json:"title"`
 	}
 )
+
+type ResponseErrors []ResponseError
+
+func (e ResponseErrors) Error() string {
+	if len(e) > 0 {
+		return e[0].Error()
+	}
+	return "unknown response error (you might try to unwrap schema.ResponseErrors)"
+}
+
+type ResponseError struct {
+	Message    string `json:"message"`
+	Extensions struct {
+		Code        string `json:"code"`
+		ServiceName string `json:"serviceName"`
+		FieldErrors []struct {
+			Loc  any    `json:"loc"`
+			Msg  string `json:"msg"`
+			Type any    `json:"type"`
+		} `json:"field_errors"`
+		Exception struct {
+			Message   string `json:"message"`
+			Locations any    `json:"locations"`
+			Path      any    `json:"path"`
+		} `json:"exception"`
+	} `json:"extensions"`
+}
+
+func (e ResponseError) Error() string {
+	msg := fmt.Sprintf(errPrefix+"%s", e.Message)
+	fieldErrors := e.Extensions.FieldErrors
+	if len(fieldErrors) > 0 {
+		msg += " (" + fieldErrors[0].Msg + ")"
+	}
+	return msg
+}
 
 // Дата, время.
 type Time struct {

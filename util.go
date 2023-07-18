@@ -47,12 +47,7 @@ func checkResponse[T any](resp *vantuz.Response, data *schema.Response[T]) error
 		return fmt.Errorf(errPrefix+"%s", *data.Error)
 	}
 	if len(data.Errors) > 0 {
-		msg := fmt.Sprintf(errPrefix+"%s", data.Errors[0].Message)
-		fieldErrors := data.Errors[0].Extensions.FieldErrors
-		if len(fieldErrors) > 0 {
-			msg += " (" + fieldErrors[0].Msg + ")"
-		}
-		return fmt.Errorf(msg)
+		return data.Errors
 	}
 	if data.Message != nil {
 		return fmt.Errorf(errPrefix+"%s", *data.Message)
