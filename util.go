@@ -43,17 +43,24 @@ func checkResponse[T any](resp *vantuz.Response, data *schema.Response[T]) error
 	if resp == nil || data == nil {
 		return ErrUnknown
 	}
+	statusCode := resp.StatusCode
+	if data.StatusCode != nil {
+		statusCode = *data.StatusCode
+	}
 	if data.Error != nil {
-		return fmt.Errorf(errPrefix+"%s", *data.Error)
+		return fmt.Errorf(errPrefix+"%w",
+			schema.NewResponseError(statusCode, *data.Error))
 	}
 	if len(data.Errors) > 0 {
-		return data.Errors
+		return schema.NewResponseErrors(statusCode, data.Errors)
 	}
 	if data.Message != nil {
-		return fmt.Errorf(errPrefix+"%s", *data.Message)
+		return fmt.Errorf(errPrefix+"%w",
+			schema.NewResponseError(statusCode, *data.Message))
 	}
 	if data.StatusCode != nil {
-		return fmt.Errorf(errPrefix+"%d", *data.StatusCode)
+		return fmt.Errorf(errPrefix+"%w",
+			schema.NewResponseError(statusCode, ""))
 	}
 	// Успешность проверяется последней, потому что
 	// graphql может выдавать код 200, даже когда в запросе есть ошибки.

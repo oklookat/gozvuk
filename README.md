@@ -11,77 +11,12 @@
 3. Некоторые айдишники будут пустые. То есть в коллекции у нас якобы есть трек,
    но по факту трека не существует.
 
-Из-за этого дальнейшие действия с треками могут привести к ошибке, потому что
-вы можете передать пустой ID.
+Вывод: проверяйте, не пустые ли ID у полученных треков (и не только треков).
 
-Мораль: проверяйте, не пустые ли ID у полученных треков (и не только треков).
+## 404
 
-# Реализовано
+Если трек/артист/что-либо-еще не найдено, то ошибки не будет.
+Будут пустые поля. Даже если получаете слайс, он будет не пустой.
+Будет один элемент с пустыми полями.
 
-- [x] search
-
-- [x] quickSearch
-
-- [x] getArtists
-
-- [x] getFullTrack
-
-- [x] getTracks
-
-- [x] getReleases
-
-- [x] getPlaylists
-
-- [x] getPlaylistTracks
-
-- [x] getShortPlaylist
-
-- [x] renamePlaylist
-
-- [x] setPlaylistToPublic
-
-- [x] userPlaylists
-
-- [x] addTracksToPlaylist
-
-- [x] updataPlaylist
-
-- [x] userTracks
-
-- [x] getAllHiddenCollection
-
-- [x] getHiddenTracks
-
-- [x] userCollection
-
-- [x] userPaginatedPodcasts
-
-- [x] synthesisPlaylist
-
-- [x] synthesisPlaylistBuild
-
-- [x] getEpisodes
-
-- [x] getPodcasts
-
-- [x] addItemToCollection
-
-- [x] addItemToHidden
-
-- [x] removeItemFromCollection
-
-- [x] removeItemFromHidden
-
-- [x] createPlaylist
-
-- [x] deletePlaylist
-
-- [x] followingCount
-
-- [x] profileFollowersCount
-
-- [ ] listenedEpisodes
-
-- [ ] listeningHistory
-
-- [ ] notificationsHasUnread
+Вывод: чтобы проверить на 404, проверяйте поля. Например ID. Даже в слайсах.

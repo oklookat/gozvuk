@@ -3,7 +3,6 @@ package schema
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/url"
 	"strconv"
 	"strings"
@@ -26,14 +25,6 @@ type ID string
 
 func (i ID) String() string {
 	return string(i)
-}
-
-type Error struct {
-	Detail string `json:"detail"`
-}
-
-func (e Error) Error() string {
-	return errPrefix + e.Detail
 }
 
 // Картинка.
@@ -107,6 +98,23 @@ type (
 	}
 )
 
+type Error struct {
+	Detail string `json:"detail"`
+}
+
+func (e Error) Error() string {
+	return e.Detail
+}
+
+func NewResponseErrors(statusCode int, errs []ResponseError) ResponseErrors {
+	out := ResponseErrors{}
+	for _, err := range errs {
+		err.StatusCode = statusCode
+		out = append(out, err)
+	}
+	return out
+}
+
 type ResponseErrors []ResponseError
 
 func (e ResponseErrors) Error() string {
@@ -116,8 +124,16 @@ func (e ResponseErrors) Error() string {
 	return "unknown response error (you might try to unwrap schema.ResponseErrors)"
 }
 
+func NewResponseError(statusCode int, message string) ResponseError {
+	return ResponseError{
+		Message:    message,
+		StatusCode: statusCode,
+	}
+}
+
 type ResponseError struct {
 	Message    string `json:"message"`
+	StatusCode int    `json:"-"`
 	Extensions struct {
 		Code        string `json:"code"`
 		ServiceName string `json:"serviceName"`
@@ -135,7 +151,7 @@ type ResponseError struct {
 }
 
 func (e ResponseError) Error() string {
-	msg := fmt.Sprintf(errPrefix+"%s", e.Message)
+	msg := e.Message
 	fieldErrors := e.Extensions.FieldErrors
 	if len(fieldErrors) > 0 {
 		msg += " (" + fieldErrors[0].Msg + ")"

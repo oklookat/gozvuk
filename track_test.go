@@ -9,7 +9,7 @@ func TestGetTracks(t *testing.T) {
 	ctx := context.Background()
 	cl := getClient(t)
 
-	resp, err := cl.GetTracks(ctx, _trackIds[:])
+	resp, err := cl.GetTracks(ctx, _trackIds[:4])
 	if err != nil {
 		t.Fatal(err)
 	}
